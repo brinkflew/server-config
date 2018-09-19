@@ -18,7 +18,7 @@ color="\033\[38;5;162m"
 
 # Get variables from command line
 while getopts uc option; do
-  case "${option}"; in
+  case "${option}" in
     u) user=${OPTARG};;
     c) color=${OPTARG};;
   esac
@@ -96,6 +96,8 @@ bash /root/iptables/*
 
 # Install iptables-persistent
 apt install -y iptables-persistent
+echo iptables-persistent iptables-persistent/autosave_v4 boolean true | sudo debconf-set-selections
+echo iptables-persistent iptables-persistent/autosave_v6 boolean true | sudo debconf-set-selections
 
 # Make sure rules are saved for persistence
 iptables-save > /root/iptables/rules.v4
