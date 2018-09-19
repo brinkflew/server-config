@@ -1,0 +1,161 @@
+#!/usr/bin/env tclsh
+
+# Set variables
+set pid     [pid]
+set ppid    [lindex [exec -- ps -o pid,ppid $pid] 3]
+set ppid1   [lindex [exec -- cat "/proc/$ppid/status" | grep PPid] 1]
+set ppid2   [lindex [exec -- cat "/proc/$ppid1/status" | grep PPid] 1]
+set process [exec -- ps -x | grep $ppid2]
+set var(user) [lindex "$process" 5]
+set var(home) [exec -- getent passwd $var(user) | cut -d: -f6]
+
+# Current system uptime
+set uptime(base)   [exec -- /usr/bin/cut -d. -f1 /proc/uptime]
+set uptime(years)  [expr {$uptime(base) / 60 / 60 / 24 / 365}]
+set uptime(days)   [expr {$uptime(base) / 60 / 60 / 24}]
+set uptime(hours)  [expr {$uptime(base) / 60 / 60 % 24}]
+set uptime(mins)   [expr {$uptime(base) / 60 % 60}]
+set uptime(secs)   [expr {$uptime(base) % 60}]
+
+# Last login time
+set login(base)    [exec -- lastlog -u $var(user)]
+set login(year)    [lindex $login(base) 12]
+set login(month)   [lindex $login(base) 8]
+set login(date)    [lindex $login(base) 9]
+set login(day)     [lindex $login(base) 7]
+set login(time)    [lindex $login(base) 10]
+set login(ip)      [lindex $login(base) 6]
+
+# SSH logins
+set sessions(base)  [exec -- w -s]
+set sessions(num)   [lindex $sessions(base) 3]
+set sessions(noun)  "users"
+set sessions(verb)  "are"
+
+if [expr ! [string is integer $sessions(num)]] {
+  set sessions(num)   [lindex $sessions(base) 4]
+}
+
+if [expr $sessions(num) < 2] {
+  set sessions(noun) "user"
+  set sessions(verb) "is"
+}
+
+# Processors usage
+set load(base)     [exec -- /bin/cat /proc/loadavg]
+set load(1)        [lindex $load(base) 0]
+set load(5)        [lindex $load(base) 1]
+set load(15)       [lindex $load(base) 2]
+set cpu(base)      [exec -- lscpu | grep "Model name"]]
+set cpu(brand)     [lindex $cpu(base) 2]
+set cpu(brand)     [exec -- sed -e "s/(R)//gi" << "$cpu(brand)"]
+set cpu(series)    [lindex $cpu(base) 3]
+set cpu(series)    [exec -- sed -e "s/(R)//gi" << "$cpu(series)"]
+set cpu(model)     [lindex $cpu(base) 5]
+set cpu(version)   [lindex $cpu(base) 6]
+set cpu(freq)      [lindex $cpu(base) 8]
+set cpu(freq)      [exec -- sed "s/\[^0-9.]//gi" << "$cpu(freq)"]
+set cpu(maxfreq)   [exec -- lscpu | grep "CPU max MHz"]]
+set cpu(maxfreq)   [lindex $cpu(maxfreq) 3]
+set cpu(maxfreq)   [exec -- sed "s/\[^0-9.]//gi" << "$cpu(maxfreq)"]
+set cpu(maxfreq)   [exec -- echo "scale=5; $cpu(maxfreq) / 1000" | bc -l]
+set cpu(maxfreq)   [format "%-2.2f" "$cpu(maxfreq)"]
+set cpu(nproc)     [exec -- nproc]
+
+# Disk usage
+set disk(base)     [exec -- /usr/bin/du -ms $var(home)]
+set disk(used)     [lindex $disk(base) 0]
+
+# Memory usage
+set mem(base)      [exec -- free --si -m]
+set mem(total)     [lindex $mem(base) 7]
+set mem(used)      [lindex $mem(base) 8]
+set mem(free)      [lindex $mem(base) 9]
+set mem(cache)     [lindex $mem(base) 11]
+set mem(avail)     [lindex $mem(base) 12]
+set mem(swap)      [lindex $mem(base) 14]
+set mem(freeswap)  [lindex $mem(base) 16]
+set mem(usedswap)  [lindex $mem(base) 15]
+set mem(percent)   [exec -- echo "scale=5; $mem(used) / $mem(total) * 100" | bc -l]
+set mem(percent)   [format "%-02.2f" "$mem(percent)"]
+
+# Shell colors
+set norm  "\033\[0m"
+set grey  "\033\[38;5;238m"
+set white "\033\[38;5;255m"
+set pink  "\033\[38;5;162m"
+set bold  "\033\[1m"
+
+# Output to console
+
+set title(system_info_)  "$bold$pink System Information $norm$grey"
+set title(1)             [format "$bold$pink System Uptime $norm$grey.. "]
+set title(2)             [format "$bold$pink SSH Sessions $norm$grey... "]
+set title(3)             [format "$bold$pink Last Login $norm$grey..... "]
+set title(4)             [format "$bold$pink Disk Usage $norm$grey..... "]
+
+set title(cpu_specific)  "$bold$pink CPU Specifications $norm$grey"
+set title(5)             [format "$bold$pink Load $norm$grey........ "]
+set title(6)             [format "$bold$pink Model $norm$grey....... "]
+set title(7)             [format "$bold$pink Cores $norm$grey....... "]
+set title(8)             [format "$bold$pink Frequency $norm$grey... "]
+set title(e)             [format "$bold$pink Max Frequency $norm$grey"]
+
+set title(memory)        "$bold$pink Memory Usage $norm$grey"
+set title(9)             [format "$bold$pink Used $norm$grey........ "]
+set title(a)             [format "$bold$pink Available $norm$grey... "]
+set title(b)             [format "$bold$pink Cached $norm$grey...... "]
+set title(c)             [format "$bold$pink Swap $norm$grey........ "]
+set title(d)             [format "$bold$pink Load $norm$grey........ "]
+
+set string(uptime)       "$uptime(years) years $uptime(days) days $uptime(hours) hours $uptime(mins) minutes $uptime(secs) seconds"
+set string(sessions)     "There $sessions(verb) currently $sessions(num) $sessions(noun) logged in over SSH"
+set string(login)        "$login(day) $login(date), $login(month) $login(year) at $login(time) from IP $login(ip)"
+set string(disk)         "$disk(used) MB used in $var(home)"
+
+set string(cpu_load)     "$load(1)%"
+set string(cpu_model)    "$cpu(brand) $cpu(series) $cpu(model)$cpu(version)"
+set string(cpu_cores)    "$cpu(nproc)"
+set string(cpu_freq)     "$cpu(freq) GHz"
+set string(cpu_maxfreq)  "$cpu(maxfreq) GHz"
+
+set string(mem_used)     "$mem(used) / $mem(total) MB"
+set string(mem_avail)    "$mem(avail) MB"
+set string(mem_cache)    "$mem(cache) MB"
+set string(mem_swap)     "$mem(usedswap) / $mem(swap) MB"
+set string(mem_load)     "$mem(percent)%"
+
+set content(1)           [format "%-73s" "$norm$string(uptime)$grey"]
+set content(2)           [format "%-73s" "$norm$string(sessions)$grey"]
+set content(3)           [format "%-73s" "$norm$string(login)$grey"]
+set content(4)           [format "%-73s" "$norm$string(disk)$grey"]
+set content(5)           [format "%-36s" "$norm$string(cpu_load)$grey"]
+set content(6)           [format "%-36s" "$norm$string(cpu_model)$grey"]
+set content(7)           [format "%-36s" "$norm$string(cpu_cores)$grey"]
+set content(8)           [format "%-36s" "$norm$string(cpu_freq)$grey"]
+set content(9)           [format "%-36s" "$norm$string(mem_used)$grey"]
+set content(a)           [format "%-36s" "$norm$string(mem_avail)$grey"]
+set content(b)           [format "%-36s" "$norm$string(mem_cache)$grey"]
+set content(c)           [format "%-36s" "$norm$string(mem_swap)$grey"]
+set content(d)           [format "%-36s" "$norm$string(mem_load)$grey"]
+set content(e)           [format "%-36s" "$norm$string(cpu_maxfreq)$grey"]
+
+# Output to console
+puts "$grey                              ╔════════════════════╗"
+puts "$grey  ╔═══════════════════════════╣$title(system_info_)╠═══════════════════════════╗"
+puts "$grey  ║                           ╚════════════════════╝                           ║"
+puts "$grey  ║$title(1)$content(1)║"
+puts "$grey  ║$title(2)$content(2)║"
+puts "$grey  ║$title(3)$content(3)║"
+puts "$grey  ║$title(4)$content(4)║"
+puts "$grey  ╚════════════════════════════════════════════════════════════════════════════╝"
+
+puts "$grey          ╔════════════════════╗                     ╔══════════════╗"
+puts "$grey  ╔═══════╣$title(cpu_specific)╠═══════╗  ╔══════════╣$title(memory)╠══════════╗"
+puts "$grey  ║       ╚════════════════════╝       ║  ║          ╚══════════════╝          ║"
+puts "$grey  ║$title(5)$content(5)║  ║$title(d)$content(d)║"
+puts "$grey  ║$title(6)$content(6)║  ║$title(9)$content(9)║"
+puts "$grey  ║$title(7)$content(7)║  ║$title(a)$content(a)║"
+puts "$grey  ║$title(8)$content(8)║  ║$title(b)$content(b)║"
+puts "$grey  ║$title(e)$content(e)║  ║$title(c)$content(c)║"
+puts "$grey  ╚════════════════════════════════════╝  ╚════════════════════════════════════╝"
