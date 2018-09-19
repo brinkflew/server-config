@@ -48,7 +48,7 @@ useradd -G sudo -m -k /etc/skel $username
 
 # Move the pre-installed SSH key to the newly created user
 mkdir /home/$username/.ssh
-mv /root/.ssh/authorized_keys /home/$username/.ssh/authorized_keys && \
+mv /root/.ssh/authorized_keys? /home/$username/.ssh/authorized_keys && \
 rm -Rf /root/.ssh && \
 chown $username:$username /home/$username/.ssh && \
 chmod 600 /home/$username/.ssh
@@ -116,6 +116,7 @@ mkdir -p /etc/default
 sed -i "s/disabled/enabled/" ./etc/conf.d/*
 cp debian/default /etc/default/cis-hardening
 sed -i "s#CIS_ROOT_DIR=.*#CIS_ROOT_DIR='$(pwd)'#" /etc/default/cis-hardening
+chmod u+x ./bin/hardening.sh
 ./bin/hardening.sh --apply
 cd $location
 
