@@ -117,6 +117,7 @@ sed -i "s/disabled/enabled/" ./etc/conf.d/*
 cp debian/default /etc/default/cis-hardening
 sed -i "s#CIS_ROOT_DIR=.*#CIS_ROOT_DIR='$(pwd)'#" /etc/default/cis-hardening
 chmod u+x ./bin/hardening.sh
+chmod u+x ./bin/hardening/*.sh
 ./bin/hardening.sh --apply
 cd $location
 
