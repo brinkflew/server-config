@@ -111,11 +111,11 @@ echo ╚════════════════════════
 
 # Check system hardening and apply modifications if needed
 location=${pwd}
-cd /root && git clone https://github.com/ovh/debian-cis && cd debian-cis/
+cd /root/git && git clone https://github.com/ovh/debian-cis && cd debian-cis/
 mkdir -p /etc/default
 sed -i "s/disabled/enabled/" ./etc/conf.d/*
-sed -i "s#CIS_ROOT_DIR=.*#CIS_ROOT_DIR='$(pwd)'#" /etc/default/cis-hardening
 cp debian/default /etc/default/cis-hardening
+sed -i "s#CIS_ROOT_DIR=.*#CIS_ROOT_DIR='$(pwd)'#" /etc/default/cis-hardening
 ./bin/hardening.sh --apply
 cd $location
 
