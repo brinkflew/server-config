@@ -87,7 +87,7 @@ echo "sshd: ALL" | tee -a /etc/hosts.allow
 echo "ALL: ALL" | tee -a /etc/hosts.deny
 
 # Setup firewall rules (iptables)
-mkdir /root/iptables && cp -r ./firewall /root/iptables
+mkdir /root/iptables && cp ./firewall/*.sh /root/iptables/
 chown root:root /root/iptables
 chown root:root /root/iptables/*
 chmod 600 /root/iptables
