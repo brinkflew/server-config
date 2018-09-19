@@ -1,16 +1,16 @@
 #!/bin/bash
 
-# ╔═══════════════════════════════════════════════════════════════════════════╗
-# ║                Debian 9.4 Stretch Post-Installation Script                ║
-# ║      for building, preparing and configuring newly installed servers      ║
-# ╠═══════════════════════════════════════════════════════════════════════════╣
-# ║ Version: ... 0.0.0                                                        ║
-# ║ Author: .... Antoine Van Serveyt <avanserv@brinkflew.com>                 ║
-# ║ Created: ... Mon 18th, June 2018 at 10:15 by Antoine Van Serveyt          ║
-# ║ License: ... MIT License                                                  ║
-# ║                                                                           ║
-# ║ Updated: ...                                                              ║
-# ╚═══════════════════════════════════════════════════════════════════════════╝
+echo ╔═══════════════════════════════════════════════════════════════════════════╗
+echo ║                Debian 9.4 Stretch Post-Installation Script                ║
+echo ║      for building, preparing and configuring newly installed servers      ║
+echo ╠═══════════════════════════════════════════════════════════════════════════╣
+echo ║ Version: ... 0.0.0                                                        ║
+echo ║ Author: .... Antoine Van Serveyt <avanserv@brinkflew.com>                 ║
+echo ║ Created: ... Mon 18th, June 2018 at 10:15 by Antoine Van Serveyt          ║
+echo ║ License: ... MIT License                                                  ║
+echo ║                                                                           ║
+echo ║ Updated: ...                                                              ║
+echo ╚═══════════════════════════════════════════════════════════════════════════╝
 
 # Default values for varibales
 user=brinkflew
@@ -24,24 +24,24 @@ while getopts uc option; do
   esac
 done
 
-# ╔═══════════════════════════════════════════════════════════════════════════╗
-# ║ Install Requireed Packages                                                ║
-# ╚═══════════════════════════════════════════════════════════════════════════╝
+echo ╔═══════════════════════════════════════════════════════════════════════════╗
+echo ║ Install Requireed Packages                                                ║
+echo ╚═══════════════════════════════════════════════════════════════════════════╝
 
 apt update
 apt upgrade
 apt install -y git sudo
 
-# ╔═══════════════════════════════════════════════════════════════════════════╗
-# ║ Update default .bashrc and .profile                                       ║
-# ╚═══════════════════════════════════════════════════════════════════════════╝
+echo ╔═══════════════════════════════════════════════════════════════════════════╗
+echo ║ Update default .bashrc and .profile                                       ║
+echo ╚═══════════════════════════════════════════════════════════════════════════╝
 
 # Update the skel folder
 cp ./skel/* /etc/skel/
 
-# ╔═══════════════════════════════════════════════════════════════════════════╗
-# ║ Create the base admin user                                                ║
-# ╚═══════════════════════════════════════════════════════════════════════════╝
+echo ╔═══════════════════════════════════════════════════════════════════════════╗
+echo ║ Create the base admin user                                                ║
+echo ╚═══════════════════════════════════════════════════════════════════════════╝
 
 # Create the user
 useradd -G sudo -m -k -n $username
@@ -53,9 +53,9 @@ rm -Rf /root/.ssh && \
 chown $username:$username /home/$username/.ssh && \
 chmod 600 /home/$username/.ssh && \
 
-# ╔═══════════════════════════════════════════════════════════════════════════╗
-# ║ Configure the SSH daemon                                                  ║
-# ╚═══════════════════════════════════════════════════════════════════════════╝
+echo ╔═══════════════════════════════════════════════════════════════════════════╗
+echo ║ Configure the SSH daemon                                                  ║
+echo ╚═══════════════════════════════════════════════════════════════════════════╝
 
 # Setup the SSHD config
 cp ./config/sshd_config /etc/ssh/sshd_config && \
@@ -70,17 +70,17 @@ chmod 644 /etc/issue.net
 # Restart the SSH daemon
 systemctl restart ssh
 
-# ╔═══════════════════════════════════════════════════════════════════════════╗
-# ║ Install the dynamic MOTD                                                  ║
-# ╚═══════════════════════════════════════════════════════════════════════════╝
+echo ╔═══════════════════════════════════════════════════════════════════════════╗
+echo ║ Install the dynamic MOTD                                                  ║
+echo ╚═══════════════════════════════════════════════════════════════════════════╝
 
 cp ./motd/* /etc/update-motd.d/ && \
 chown root:root /etc/update-motd.d/* && \
 chmod 700 /etc/update-motd.d/*
 
-# ╔═══════════════════════════════════════════════════════════════════════════╗
-# ║ Apply network security                                                    ║
-# ╚═══════════════════════════════════════════════════════════════════════════╝
+echo ╔═══════════════════════════════════════════════════════════════════════════╗
+echo ║ Apply network security                                                    ║
+echo ╚═══════════════════════════════════════════════════════════════════════════╝
 
 # Configure Hosts files
 echo "sshd: ALL" | tee -a /etc/hosts.allow
@@ -105,9 +105,9 @@ ip6tables-save > /root/iptables/rules.v6
 mv /root/iptables/rules.v4 /etc/iptables/rules.v4
 mv /root/iptables/rules.v6 /etc/iptables/rules.v6
 
-# ╔═══════════════════════════════════════════════════════════════════════════╗
-# ║ Apply system hardening                                                    ║
-# ╚═══════════════════════════════════════════════════════════════════════════╝
+echo ╔═══════════════════════════════════════════════════════════════════════════╗
+echo ║ Apply system hardening                                                    ║
+echo ╚═══════════════════════════════════════════════════════════════════════════╝
 
 # Check system hardening and apply modifications if needed
 location=${pwd}
@@ -119,9 +119,9 @@ cp debian/default /etc/default/cis-hardening
 ./bin/hardening.sh --apply
 cd $location
 
-# ╔═══════════════════════════════════════════════════════════════════════════╗
-# ║ Deactivate root login to TTY                                              ║
-# ╚═══════════════════════════════════════════════════════════════════════════╝
+echo ╔═══════════════════════════════════════════════════════════════════════════╗
+echo ║ Deactivate root login to TTY                                              ║
+echo ╚═══════════════════════════════════════════════════════════════════════════╝
 
 # Deactivate root login
 usermod -s /bin/false root
