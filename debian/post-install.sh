@@ -25,7 +25,7 @@ while getopts uc option; do
 done
 
 echo ╔═══════════════════════════════════════════════════════════════════════════╗
-echo ║ Install Requireed Packages                                                ║
+echo ║ Install Required Packages                                                ║
 echo ╚═══════════════════════════════════════════════════════════════════════════╝
 
 apt update
@@ -37,21 +37,21 @@ echo ║ Update default .bashrc and .profile                                    
 echo ╚═══════════════════════════════════════════════════════════════════════════╝
 
 # Update the skel folder
-cp ./skel/* /etc/skel/
+cp -r ./skel /etc/skel
 
 echo ╔═══════════════════════════════════════════════════════════════════════════╗
 echo ║ Create the base admin user                                                ║
 echo ╚═══════════════════════════════════════════════════════════════════════════╝
 
 # Create the user
-useradd -G sudo -m -k -n $username
+useradd -G sudo -m -k /etc/skel $username
 
 # Move the pre-installed SSH key to the newly created user
 mkdir /home/$username/.ssh
-mv /root/.ssh/authorized_keys? /home/$username/.ssh/authorized_keys && \
+mv /root/.ssh/authorized_keys /home/$username/.ssh/authorized_keys && \
 rm -Rf /root/.ssh && \
 chown $username:$username /home/$username/.ssh && \
-chmod 600 /home/$username/.ssh && \
+chmod 600 /home/$username/.ssh
 
 echo ╔═══════════════════════════════════════════════════════════════════════════╗
 echo ║ Configure the SSH daemon                                                  ║
@@ -63,7 +63,7 @@ chown root:root /etc/ssh/sshd_config && \
 chmod 600 /etc/ssh/sshd_config
 
 # Install the SSH banner
-cp ./banner /etc/issue.net && \
+cp ./banner/issue.net /etc/issue.net && \
 chown root:root /etc/issue.net && \
 chmod 644 /etc/issue.net
 
