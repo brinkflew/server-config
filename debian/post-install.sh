@@ -13,13 +13,13 @@ echo ║ Updated: ...                                                           
 echo ╚═══════════════════════════════════════════════════════════════════════════╝
 
 # Default values for varibales
-user=brinkflew
+username="brinkflew"
 color="\033\[38;5;162m"
 
 # Get variables from command line
 while getopts uc option; do
   case "${option}" in
-    u) user=${OPTARG};;
+    u) username=${OPTARG};;
     c) color=${OPTARG};;
   esac
 done
@@ -87,7 +87,7 @@ echo "sshd: ALL" | tee -a /etc/hosts.allow
 echo "ALL: ALL" | tee -a /etc/hosts.deny
 
 # Setup firewall rules (iptables)
-mkdir /root/iptables && cp ./firewall/* /root/iptables
+mkdir /root/iptables && cp -r ./firewall /root/iptables
 chown root:root /root/iptables
 chown root:root /root/iptables/*
 chmod 600 /root/iptables
@@ -111,7 +111,7 @@ echo ╚════════════════════════
 
 # Check system hardening and apply modifications if needed
 location=${pwd}
-cd /root/git && git clone https://github.com/ovh/debian-cis && cd debian-cis/
+cd cis/
 mkdir -p /etc/default
 sed -i "s/disabled/enabled/" ./etc/conf.d/*
 cp debian/default /etc/default/cis-hardening
