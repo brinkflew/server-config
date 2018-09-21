@@ -44,7 +44,7 @@ cp ./skel/.bashrc /etc/skel/.bashrc
 
 # Create the user
 useradd -G sudo -m -s /bin/bash $username
-. /home/$username/.bashrc
+chage -d 0 $username
 
 # Move the pre-installed SSH key to the newly created user
 mkdir /home/$username/.ssh
