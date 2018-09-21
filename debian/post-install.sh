@@ -78,11 +78,18 @@ systemctl restart ssh
 # ║ Install the dynamic MOTD                                                  ║
 # ╚═══════════════════════════════════════════════════════════════════════════╝
 
+# Install the TCL shell
 apt install -y tclsh
+
+# Disable the basic MOTD
 systemctl disable motd
+
+# Clean up the old MOTD files
 rm -f /etc/motd && \
-rm -f /var/run/motd.dynamic && \
-rm -f /etc/update-motd.d/* && \
+rm -f /var/run/motd.dynamic
+# rm -f /etc/update-motd.d/* && \
+
+# Install the new MOTD scripts
 cp ./motd/* /etc/update-motd.d/ && \
 chown root:root /etc/update-motd.d/* && \
 chmod 700 /etc/update-motd.d/* && \
