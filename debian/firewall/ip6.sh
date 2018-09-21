@@ -17,7 +17,7 @@
 # ╚═══════════════════════════════════════════════════════════════════════════╝
 
 # Path to executable
-IPT=/sbin/ip6tables
+IPT="/sbin/ip6tables"
 
 # Shortcuts
 LOG="-j LOG --log-level info --log-prefix"

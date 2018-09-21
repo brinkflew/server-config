@@ -28,9 +28,9 @@ ACCEPT="-j ACCEPT"
 STATE="-m state --state"
 
 # IPs configuration
-HOST_IP="$(hostname -I)"
-DNS_IP="0.0.0.0"
-PROXY_IP="0.0.0.0"
+HOST_IP="$(hostname -I)/32"
+DNS_IP="0.0.0.0/0"
+PROXY_IP="0.0.0.0/0"
 
 # Network cards configuration
 INET="eth0"
