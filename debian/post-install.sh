@@ -44,6 +44,7 @@ cp ./skel/.bashrc /etc/skel/.bashrc
 
 # Create the user
 useradd -G sudo -m $username
+. /home/$username/.bashrc
 
 # Move the pre-installed SSH key to the newly created user
 mkdir /home/$username/.ssh
@@ -79,6 +80,7 @@ systemctl restart ssh
 cp ./motd/* /etc/update-motd.d/ && \
 chown root:root /etc/update-motd.d/* && \
 chmod 700 /etc/update-motd.d/*
+chmod +x /etc/update-motd.d/*
 
 # ╔═══════════════════════════════════════════════════════════════════════════╗
 # ║ Apply network security                                                    ║
