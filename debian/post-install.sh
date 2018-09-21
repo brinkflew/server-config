@@ -82,8 +82,8 @@ systemctl disable motd
 apt install -y tclsh
 cp ./motd/* /etc/update-motd.d/ && \
 chown root:root /etc/update-motd.d/* && \
-chmod 700 /etc/update-motd.d/*
-chmod +x /etc/update-motd.d/*
+chmod 744 /etc/update-motd.d/*
+chmod a+x /etc/update-motd.d/*
 rm -f /etc/motd
 
 # ╔═══════════════════════════════════════════════════════════════════════════╗
