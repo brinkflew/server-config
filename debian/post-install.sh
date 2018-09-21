@@ -86,8 +86,8 @@ systemctl disable motd
 
 # Clean up the old MOTD files
 rm -f /etc/motd && \
-rm -f /var/run/motd.dynamic
-# rm -f /etc/update-motd.d/* && \
+rm -f /var/run/motd.dynamic && \
+rm -f /etc/update-motd.d/*
 
 # Install the new MOTD scripts
 cp ./motd/* /etc/update-motd.d/ && \
