@@ -42,25 +42,25 @@ if [expr $sessions(num) < 2] {
 }
 
 # Processors usage
-set load(base)     [exec -- /bin/cat /proc/loadavg]
-set load(1)        [lindex $load(base) 0]
-set load(5)        [lindex $load(base) 1]
-set load(15)       [lindex $load(base) 2]
-set cpu(base)      [exec -- lscpu | grep "Model name"]]
-set cpu(brand)     [lindex $cpu(base) 2]
-set cpu(brand)     [exec -- sed -e "s/(R)//gi" << "$cpu(brand)"]
-set cpu(series)    [lindex $cpu(base) 3]
-set cpu(series)    [exec -- sed -e "s/(R)//gi" << "$cpu(series)"]
-set cpu(model)     [lindex $cpu(base) 5]
-set cpu(version)   [lindex $cpu(base) 6]
-set cpu(freq)      [lindex $cpu(base) 8]
-set cpu(freq)      [exec -- sed "s/\[^0-9.]//gi" << "$cpu(freq)"]
-set cpu(maxfreq)   [exec -- lscpu | grep "CPU max MHz"]]
-set cpu(maxfreq)   [lindex $cpu(maxfreq) 3]
-set cpu(maxfreq)   [exec -- sed "s/\[^0-9.]//gi" << "$cpu(maxfreq)"]
-set cpu(maxfreq)   [exec -- echo "scale=5; $cpu(maxfreq) / 1000" | bc -l]
-set cpu(maxfreq)   [format "%-2.2f" "$cpu(maxfreq)"]
-set cpu(nproc)     [exec -- nproc]
+#set load(base)     [exec -- /bin/cat /proc/loadavg]
+#set load(1)        [lindex $load(base) 0]
+#set load(5)        [lindex $load(base) 1]
+#set load(15)       [lindex $load(base) 2]
+#set cpu(base)      [exec -- lscpu | grep "Model name"]]
+#set cpu(brand)     [lindex $cpu(base) 2]
+#set cpu(brand)     [exec -- sed -e "s/(R)//gi" << "$cpu(brand)"]
+#set cpu(series)    [lindex $cpu(base) 3]
+#set cpu(series)    [exec -- sed -e "s/(R)//gi" << "$cpu(series)"]
+#set cpu(model)     [lindex $cpu(base) 5]
+#set cpu(version)   [lindex $cpu(base) 6]
+#set cpu(freq)      [lindex $cpu(base) 8]
+#set cpu(freq)      [exec -- sed "s/\[^0-9.]//gi" << "$cpu(freq)"]
+#set cpu(maxfreq)   [exec -- lscpu | grep "CPU max MHz"]]
+#set cpu(maxfreq)   [lindex $cpu(maxfreq) 3]
+#set cpu(maxfreq)   [exec -- sed "s/\[^0-9.]//gi" << "$cpu(maxfreq)"]
+#set cpu(maxfreq)   [exec -- echo "scale=5; $cpu(maxfreq) / 1000" | bc -l]
+#set cpu(maxfreq)   [format "%-2.2f" "$cpu(maxfreq)"]
+#set cpu(nproc)     [exec -- nproc]
 
 # Disk usage
 set disk(base)     [exec -- /usr/bin/du -ms $var(home)]
@@ -150,12 +150,22 @@ puts "$grey  ║$title(3)$content(3)║"
 puts "$grey  ║$title(4)$content(4)║"
 puts "$grey  ╚════════════════════════════════════════════════════════════════════════════╝"
 
-puts "$grey          ╔════════════════════╗                     ╔══════════════╗"
-puts "$grey  ╔═══════╣$title(cpu_specific)╠═══════╗  ╔══════════╣$title(memory)╠══════════╗"
-puts "$grey  ║       ╚════════════════════╝       ║  ║          ╚══════════════╝          ║"
-puts "$grey  ║$title(5)$content(5)║  ║$title(d)$content(d)║"
-puts "$grey  ║$title(6)$content(6)║  ║$title(9)$content(9)║"
-puts "$grey  ║$title(7)$content(7)║  ║$title(a)$content(a)║"
-puts "$grey  ║$title(8)$content(8)║  ║$title(b)$content(b)║"
-puts "$grey  ║$title(e)$content(e)║  ║$title(c)$content(c)║"
-puts "$grey  ╚════════════════════════════════════╝  ╚════════════════════════════════════╝"
+puts "$grey             ╔══════════════╗"
+puts "$grey  ╔══════════╣$title(memory)╠══════════╗"
+puts "$grey  ║          ╚══════════════╝          ║"
+puts "$grey  ║$title(d)$content(d)║"
+puts "$grey  ║$title(9)$content(9)║"
+puts "$grey  ║$title(a)$content(a)║"
+puts "$grey  ║$title(b)$content(b)║"
+puts "$grey  ║$title(c)$content(c)║"
+puts "$grey  ╚════════════════════════════════════╝"
+
+#puts "$grey          ╔════════════════════╗                     ╔══════════════╗"
+#puts "$grey  ╔═══════╣$title(cpu_specific)╠═══════╗  ╔══════════╣$title(memory)╠══════════╗"
+#puts "$grey  ║       ╚════════════════════╝       ║  ║          ╚══════════════╝          ║"
+#puts "$grey  ║$title(5)$content(5)║  ║$title(d)$content(d)║"
+#puts "$grey  ║$title(6)$content(6)║  ║$title(9)$content(9)║"
+#puts "$grey  ║$title(7)$content(7)║  ║$title(a)$content(a)║"
+#puts "$grey  ║$title(8)$content(8)║  ║$title(b)$content(b)║"
+#puts "$grey  ║$title(e)$content(e)║  ║$title(c)$content(c)║"
+#puts "$grey  ╚════════════════════════════════════╝  ╚════════════════════════════════════╝"

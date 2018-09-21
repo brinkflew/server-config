@@ -43,7 +43,7 @@ cp ./skel/.bashrc /etc/skel/.bashrc
 # ╚═══════════════════════════════════════════════════════════════════════════╝
 
 # Create the user
-useradd -G sudo -m $username
+useradd -G sudo -m -s /bin/bash $username
 . /home/$username/.bashrc
 
 # Move the pre-installed SSH key to the newly created user
