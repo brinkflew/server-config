@@ -36,7 +36,7 @@ apt install -y git sudo bc
 # ╚═══════════════════════════════════════════════════════════════════════════╝
 
 # Update the skel folder
-cp -r ./skel /etc/skel
+cp ./skel/.bashrc /etc/skel/.bashrc
 
 # ╔═══════════════════════════════════════════════════════════════════════════╗
 # ║ Create the base admin user                                                ║
