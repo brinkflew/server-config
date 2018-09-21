@@ -78,13 +78,15 @@ systemctl restart ssh
 # ║ Install the dynamic MOTD                                                  ║
 # ╚═══════════════════════════════════════════════════════════════════════════╝
 
-systemctl disable motd
 apt install -y tclsh
+systemctl disable motd
+rm -f /etc/update-motd.d/* && \
+rm -f /etc/motd && \
+rm -f /var/run/motd.dynamic && \
 cp ./motd/* /etc/update-motd.d/ && \
 chown root:root /etc/update-motd.d/* && \
-chmod 744 /etc/update-motd.d/*
+chmod 744 /etc/update-motd.d/* && \
 chmod a+x /etc/update-motd.d/*
-rm -f /etc/motd
 
 # ╔═══════════════════════════════════════════════════════════════════════════╗
 # ║ Apply network security                                                    ║
