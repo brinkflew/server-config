@@ -49,8 +49,11 @@ useradd -G sudo -m $username
 mkdir /home/$username/.ssh
 mv /root/.ssh/authorized_keys /home/$username/.ssh/authorized_keys && \
 rm -Rf /root/.ssh && \
+chown $username:$username /home/$username && \
 chown $username:$username /home/$username/.ssh && \
-chmod 600 /home/$username/.ssh
+chown $username:$username /home/$username/.ssh/authorized_keys && \
+chmod 700 /home/$username/.ssh
+chmod 600 /home/$username/.ssh/authorized_keys
 
 # ╔═══════════════════════════════════════════════════════════════════════════╗
 # ║ Configure the SSH daemon                                                  ║
