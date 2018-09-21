@@ -29,7 +29,7 @@ done
 # ╚═══════════════════════════════════════════════════════════════════════════╝
 
 apt update && apt upgrade -y
-apt install -y git sudo
+apt install -y git sudo bc
 
 # ╔═══════════════════════════════════════════════════════════════════════════╗
 # ║ Update default .bashrc                                                    ║
@@ -47,7 +47,7 @@ useradd -G sudo -m $username
 
 # Move the pre-installed SSH key to the newly created user
 mkdir /home/$username/.ssh
-mv /root/.ssh/authorized_keys? /home/$username/.ssh/authorized_keys && \
+mv /root/.ssh/authorized_keys /home/$username/.ssh/authorized_keys && \
 rm -Rf /root/.ssh && \
 chown $username:$username /home/$username/.ssh && \
 chmod 600 /home/$username/.ssh
