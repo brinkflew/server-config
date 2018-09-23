@@ -96,7 +96,8 @@ chown root:root /etc/update-motd.d/* && \
 chmod 700 /etc/update-motd.d/* && \
 chmod a+x /etc/update-motd.d/*
 
-cp /run/motd.dynamic.new /run/motd.dynamic
+ln -s /run/motd.dynamic.new /run/motd.dynamic
+#cp /run/motd.dynamic.new /run/motd.dynamic
 
 # ╔═══════════════════════════════════════════════════════════════════════════╗
 # ║ Apply network security                                                    ║

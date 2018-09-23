@@ -44,7 +44,7 @@ set hv [string repeat " " [expr "(78 - $tl - 5) / 2"]]
 
 set title "$pink$user$norm @ $pink$host$grey"
 if [expr "$tl % 2" > 0 ] {
-  set title "$pink$user$norm $norm$host"
+  set title "$pink$user$norm $norm$host$grey"
 }
 
 set l(1) [format "%-89s" "Hello $pink$user$norm,"]

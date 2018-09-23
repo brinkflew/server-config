@@ -7,7 +7,8 @@ set ppid1   [lindex [exec -- cat "/proc/$ppid/status" | grep PPid] 1]
 set ppid2   [lindex [exec -- cat "/proc/$ppid1/status" | grep PPid] 1]
 set process [exec -- ps -x | grep $ppid2]
 set var(user) [lindex "$process" 5]
-set var(home) [exec -- getent passwd $var(user) | cut -d: -f6]
+#set var(home) [exec -- getent passwd $var(user) | cut -d: -f6]
+set var(home) [exec -- getent passwd avanserv | cut -d: -f6]
 
 # Current system uptime
 set uptime(base)   [exec -- /usr/bin/cut -d. -f1 /proc/uptime]
