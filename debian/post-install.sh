@@ -17,8 +17,9 @@ username="brinkflew"
 color="\033\[38;5;162m"
 
 # Get variables from command line
-while getopts uc option; do
-  case "${option}" in
+while getopts u:c: option; do
+  case "${option}"
+  in
     u) username=${OPTARG};;
     c) color=${OPTARG};;
   esac
@@ -106,23 +107,23 @@ echo "sshd: ALL" | tee -a /etc/hosts.allow
 echo "ALL: ALL" | tee -a /etc/hosts.deny
 
 # Setup firewall rules (iptables)
-#mkdir /root/iptables && cp ./firewall/*.sh /root/iptables/
-#chown root:root /root/iptables
-#chown root:root /root/iptables/*
-#chmod 600 /root/iptables
-#chmod 700 /root/iptables/*
-#bash /root/iptables/*
+mkdir /root/iptables && cp ./firewall/*.sh /root/iptables/
+chown root:root /root/iptables
+chown root:root /root/iptables/*
+chmod 700 /root/iptables
+chmod 600 /root/iptables/*
+bash /root/iptables/*
 
 # Install iptables-persistent
-#apt install -y iptables-persistent
-#echo iptables-persistent iptables-persistent/autosave_v4 boolean true | sudo debconf-set-selections
-#echo iptables-persistent iptables-persistent/autosave_v6 boolean true | sudo debconf-set-selections
+apt install -y iptables-persistent
+echo iptables-persistent iptables-persistent/autosave_v4 boolean true | sudo debconf-set-selections
+echo iptables-persistent iptables-persistent/autosave_v6 boolean true | sudo debconf-set-selections
 
 # Make sure rules are saved for persistence
-#iptables-save > /root/iptables/rules.v4
-#ip6tables-save > /root/iptables/rules.v6
-#mv /root/iptables/rules.v4 /etc/iptables/rules.v4
-#mv /root/iptables/rules.v6 /etc/iptables/rules.v6
+iptables-save > /root/iptables/rules.v4
+ip6tables-save > /root/iptables/rules.v6
+mv /root/iptables/rules.v4 /etc/iptables/rules.v4
+mv /root/iptables/rules.v6 /etc/iptables/rules.v6
 
 # ╔═══════════════════════════════════════════════════════════════════════════╗
 # ║ Apply system hardening                                                    ║
@@ -146,3 +147,9 @@ cd $location
 
 # Deactivate root login
 usermod -s /bin/false root
+
+# ╔═══════════════════════════════════════════════════════════════════════════╗
+# ║ Finally, reboot the system                                                ║
+# ╚═══════════════════════════════════════════════════════════════════════════╝
+
+# shutdown -r now
