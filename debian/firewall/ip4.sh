@@ -70,28 +70,28 @@ $IPT -A OUTPUT $STATE ESTABLISHED,RELATED $ACCEPT
 # ╚═══════════════════════════════════════════════════════════════════════════╝
 
 # Allow SSH traffic
-$IPT -A INPUT -d $HOSTIP -p tcp --dport 9122 $LOG_WARN "[IPv4 Allow SSH] "
-$IPT -A INPUT -d $HOSTIP -p tcp --dport 9122 $ACCEPT
+$IPT -A INPUT -d $HOST_IP -p tcp --dport 9122 $LOG_WARN "[IPv4 Allow SSH] "
+$IPT -A INPUT -d $HOST_IP -p tcp --dport 9122 $ACCEPT
 
 # ╔═══════════════════════════════════════════════════════════════════════════╗
 # ║ Monitoring Rules                                                          ║
 # ╚═══════════════════════════════════════════════════════════════════════════╝
 
 # ICMP: Allow being pinged
-$IPT -A INPUT  -p icmp -d $HOSTIP --icmp-type  8/0 $LOG "[IPv4 Allow ICMP IN] "
-$IPT -A INPUT  -p icmp -d $HOSTIP --icmp-type  8/0 $ACCEPT
+$IPT -A INPUT  -p icmp -d $HOST_IP --icmp-type  8/0 $LOG "[IPv4 Allow ICMP IN] "
+$IPT -A INPUT  -p icmp -d $HOST_IP --icmp-type  8/0 $ACCEPT
 
 # ICMP: Allow pinging
-$IPT -A OUTPUT -p icmp -s $HOSTIP --icmp-type  8/0 $LOG "[IPv4 Allow ICMP OUT] "
-$IPT -A OUTPUT -p icmp -s $HOSTIP --icmp-type  8/0 $ACCEPT
+$IPT -A OUTPUT -p icmp -s $HOST_IP --icmp-type  8/0 $LOG "[IPv4 Allow ICMP OUT] "
+$IPT -A OUTPUT -p icmp -s $HOST_IP --icmp-type  8/0 $ACCEPT
 
 # ICMP: Allow receiving ping timeouts
-$IPT -A INPUT  -p icmp -d $HOSTIP --icmp-type 11/0 $LOG "[IPv4 ICMP Timeout IN] "
-$IPT -A INPUT  -p icmp -d $HOSTIP --icmp-type 11/0 $ACCEPT
+$IPT -A INPUT  -p icmp -d $HOST_IP --icmp-type 11/0 $LOG "[IPv4 ICMP Timeout IN] "
+$IPT -A INPUT  -p icmp -d $HOST_IP --icmp-type 11/0 $ACCEPT
 
 # ICMP: Allow sending ping timeouts
-$IPT -A OUTPUT -p icmp -s $HOSTIP --icmp-type 11/0 $LOG "[IPv4 ICMP Timeout OUT] "
-$IPT -A OUTPUT -p icmp -s $HOSTIP --icmp-type 11/0 $ACCEPT
+$IPT -A OUTPUT -p icmp -s $HOST_IP --icmp-type 11/0 $LOG "[IPv4 ICMP Timeout OUT] "
+$IPT -A OUTPUT -p icmp -s $HOST_IP --icmp-type 11/0 $ACCEPT
 
 # ╔═══════════════════════════════════════════════════════════════════════════╗
 # ║ Per-Service Rules                                                         ║
