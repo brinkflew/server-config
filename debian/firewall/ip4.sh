@@ -28,9 +28,9 @@ ACCEPT="-j ACCEPT"
 STATE="-m state --state"
 
 # IPs configuration
-HOST_IP="$(hostname -I)/32"
-DNS_IP="0.0.0.0/0"
-PROXY_IP="0.0.0.0/0"
+HOST_IP="$(hostname -I)"
+DNS_IP="0.0.0.0"
+PROXY_IP="0.0.0.0"
 
 # Network cards configuration
 INET="eth0"
@@ -98,24 +98,24 @@ $IPT -A OUTPUT -p icmp -s $HOST_IP --icmp-type 11/0 $ACCEPT
 # ╚═══════════════════════════════════════════════════════════════════════════╝
 
 # Allow DNS requests
-$IPT -A OUTPUT -p udp -o $INET --dport 53 $LOG "[IPv4 Allow DNS] "
-$IPT -A OUTPUT -p udp -o $INET --dport 53 $ACCEPT
+$IPT -A OUTPUT -p udp -s $HOST_IP -o $INET --dport 53 $LOG "[IPv4 Allow DNS] "
+$IPT -A OUTPUT -p udp -s $HOST_IP -o $INET --dport 53 $ACCEPT
 
 # Allow NTP sync
-$IPT -A OUTPUT -p udp -o $INET --dport 123 $LOG "[IPv4 Allow NTP Sync] "
-$IPT -A OUTPUT -p udp -o $INET --dport 123 $ACCEPT
+$IPT -A OUTPUT -p udp -s $HOST_IP -o $INET --dport 123 $LOG "[IPv4 Allow NTP Sync] "
+$IPT -A OUTPUT -p udp -s $HOST_IP -o $INET --dport 123 $ACCEPT
 
 # Allow FTP traffic (for package managers)
-$IPT -A OUTPUT -p tcp -o $INET --dport 21 $LOG "[IPv4 Allow FTP Download] "
-$IPT -A OUTPUT -p tcp -o $INET --dport 21 $ACCEPT
+$IPT -A OUTPUT -p tcp -s $HOST_IP -o $INET --dport 21 $LOG "[IPv4 Allow FTP Download] "
+$IPT -A OUTPUT -p tcp -s $HOST_IP -o $INET --dport 21 $ACCEPT
 
 # Allow HTTP traffic
-$IPT -A OUTPUT -p tcp -o $INET --dport 80 $LOG "[IPv4 Allow HTTP Browsing] "
-$IPT -A OUTPUT -p tcp -o $INET --dport 80 $ACCEPT
+$IPT -A OUTPUT -p tcp -s $HOST_IP -o $INET --dport 80 $LOG "[IPv4 Allow HTTP Browsing] "
+$IPT -A OUTPUT -p tcp -s $HOST_IP -o $INET --dport 80 $ACCEPT
 
 # Allow HTTPS traffic
-$IPT -A OUTPUT -p tcp -o $INET --dport 443 $LOG "[IPv4 Allow HTTPS Browsing] "
-$IPT -A OUTPUT -p tcp -o $INET --dport 443 $ACCEPT
+$IPT -A OUTPUT -p tcp -s $HOST_IP -o $INET --dport 443 $LOG "[IPv4 Allow HTTPS Browsing] "
+$IPT -A OUTPUT -p tcp -s $HOST_IP -o $INET --dport 443 $ACCEPT
 
 # ╔═══════════════════════════════════════════════════════════════════════════╗
 # ║ Default Deny Rules                                                        ║
