@@ -70,8 +70,10 @@ $IPT -A OUTPUT $STATE ESTABLISHED,RELATED $ACCEPT
 # ╚═══════════════════════════════════════════════════════════════════════════╝
 
 # Allow SSH traffic
-$IPT -A INPUT -d $HOST_IP -p tcp --dport 9122 $LOG_WARN "[IPv4 Allow SSH] "
-$IPT -A INPUT -d $HOST_IP -p tcp --dport 9122 $ACCEPT
+$IPT -A OUTPUT -d $HOST_IP -p tcp --sport 9122 $LOG_WARN "[IPv4 Allow SSH OUT] "
+$IPT -A OUTPUT -d $HOST_IP -p tcp --sport 9122 $ACCEPT
+$IPT -A INPUT  -d $HOST_IP -p tcp --dport 9122 $LOG_WARN "[IPv4 Allow SSH IN] "
+$IPT -A INPUT  -d $HOST_IP -p tcp --dport 9122 $ACCEPT
 
 # ╔═══════════════════════════════════════════════════════════════════════════╗
 # ║ Monitoring Rules                                                          ║
@@ -98,33 +100,43 @@ $IPT -A OUTPUT -p icmp -s $HOST_IP --icmp-type 11/0 $ACCEPT
 # ╚═══════════════════════════════════════════════════════════════════════════╝
 
 # Allow DNS requests
-$IPT -A OUTPUT -p udp -s $HOST_IP -o $INET --dport 53 $LOG "[IPv4 Allow DNS] "
+$IPT -A OUTPUT -p udp -s $HOST_IP -o $INET --dport 53 $LOG "[IPv4 Allow DNS OUT] "
 $IPT -A OUTPUT -p udp -s $HOST_IP -o $INET --dport 53 $ACCEPT
+$IPT -A INPUT  -p udp -d $HOST_IP -o $INET --sport 53 $LOG "[IPv4 Allow DNS IN] "
+$IPT -A INPUT  -p udp -d $HOST_IP -o $INET --sport 53 $ACCEPT
 
 # Allow NTP sync
-$IPT -A OUTPUT -p udp -s $HOST_IP -o $INET --dport 123 $LOG "[IPv4 Allow NTP Sync] "
+$IPT -A OUTPUT -p udp -s $HOST_IP -o $INET --dport 123 $LOG "[IPv4 Allow NTP OUT] "
 $IPT -A OUTPUT -p udp -s $HOST_IP -o $INET --dport 123 $ACCEPT
+$IPT -A INPUT  -p udp -d $HOST_IP -o $INET --sport 123 $LOG "[IPv4 Allow NTP IN] "
+$IPT -A INPUT  -p udp -d $HOST_IP -o $INET --sport 123 $ACCEPT
 
 # Allow FTP traffic (for package managers)
-$IPT -A OUTPUT -p tcp -s $HOST_IP -o $INET --dport 21 $LOG "[IPv4 Allow FTP Download] "
+$IPT -A OUTPUT -p tcp -s $HOST_IP -o $INET --dport 21 $LOG "[IPv4 Allow FTP OUT] "
 $IPT -A OUTPUT -p tcp -s $HOST_IP -o $INET --dport 21 $ACCEPT
+$IPT -A INPUT  -p tcp -d $HOST_IP -o $INET --sport 21 $LOG "[IPv4 Allow FTP IN] "
+$IPT -A INPUT  -p tcp -d $HOST_IP -o $INET --sport 21 $ACCEPT
 
 # Allow HTTP traffic
-$IPT -A OUTPUT -p tcp -s $HOST_IP -o $INET --dport 80 $LOG "[IPv4 Allow HTTP Browsing] "
+$IPT -A OUTPUT -p tcp -s $HOST_IP -o $INET --dport 80 $LOG "[IPv4 Allow HTTP OUT] "
 $IPT -A OUTPUT -p tcp -s $HOST_IP -o $INET --dport 80 $ACCEPT
+$IPT -A INPUT  -p tcp -d $HOST_IP -o $INET --sport 80 $LOG "[IPv4 Allow HTTP IN] "
+$IPT -A INPUT  -p tcp -d $HOST_IP -o $INET --sport 80 $ACCEPT
 
 # Allow HTTPS traffic
-$IPT -A OUTPUT -p tcp -s $HOST_IP -o $INET --dport 443 $LOG "[IPv4 Allow HTTPS Browsing] "
+$IPT -A OUTPUT -p tcp -s $HOST_IP -o $INET --dport 443 $LOG "[IPv4 Allow HTTPS OUT] "
 $IPT -A OUTPUT -p tcp -s $HOST_IP -o $INET --dport 443 $ACCEPT
+$IPT -A INPUT  -p tcp -d $HOST_IP -o $INET --sport 443 $LOG "[IPv4 Allow HTTPS IN] "
+$IPT -A INPUT  -p tcp -d $HOST_IP -o $INET --sport 443 $ACCEPT
 
 # ╔═══════════════════════════════════════════════════════════════════════════╗
 # ║ Default Deny Rules                                                        ║
 # ╚═══════════════════════════════════════════════════════════════════════════╝
 
-# Input
-$IPT -A INPUT  $LOG "[IPv4 Deny OUT] "
-$IPT -A INPUT  $DROP
-
 # Output
-$IPT -A OUTPUT $LOG "[IPv4 Deny IN] "
+$IPT -A OUTPUT $LOG "[IPv4 Deny OUT] "
 $IPT -A OUTPUT $DROP
+
+# Input
+$IPT -A INPUT  $LOG "[IPv4 Deny IN] "
+$IPT -A INPUT  $DROP
