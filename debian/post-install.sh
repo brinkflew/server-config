@@ -5,7 +5,7 @@
 # ║      for building, preparing and configuring newly installed servers      ║
 # ╠═══════════════════════════════════════════════════════════════════════════╣
 # ║ Version: ... 0.0.0                                                        ║
-# ║ Author: .... Antoine Van Serveyt <avanserv@brinkflew.com>                 ║
+# ║ Author: .... Antoine Van Serveyt <antoine.van.serveyt@avanserv.com>       ║
 # ║ Created: ... Mon 18th, June 2018 at 10:15 by Antoine Van Serveyt          ║
 # ║ License: ... MIT License                                                  ║
 # ║                                                                           ║
@@ -13,7 +13,7 @@
 # ╚═══════════════════════════════════════════════════════════════════════════╝
 
 # Default values for variables
-username="brinkflew"
+username="avanserv"
 color="\033\[38;5;162m"
 
 # Get variables from command line
