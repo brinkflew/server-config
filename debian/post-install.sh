@@ -95,6 +95,8 @@ chown root:root /etc/update-motd.d/* && \
 chmod 700 /etc/update-motd.d/* && \
 chmod a+x /etc/update-motd.d/*
 
+cp /run/motd.dynamic.new /run/motd.dynamic
+
 # ╔═══════════════════════════════════════════════════════════════════════════╗
 # ║ Apply network security                                                    ║
 # ╚═══════════════════════════════════════════════════════════════════════════╝
@@ -135,7 +137,7 @@ cp debian/default /etc/default/cis-hardening
 sed -i "s#CIS_ROOT_DIR=.*#CIS_ROOT_DIR='$(pwd)'#" /etc/default/cis-hardening
 chmod u+x ./bin/hardening.sh
 chmod u+x ./bin/hardening/*.sh
-#./bin/hardening.sh --apply
+./bin/hardening.sh --apply
 cd $location
 
 # ╔═══════════════════════════════════════════════════════════════════════════╗
