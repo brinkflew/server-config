@@ -102,32 +102,32 @@ $IPT -A OUTPUT -p icmp -s $HOST_IP --icmp-type 11/0 $ACCEPT
 # Allow DNS requests
 $IPT -A OUTPUT -p udp -s $HOST_IP -o $INET --dport 53 $LOG "[IPv4 Allow DNS OUT] "
 $IPT -A OUTPUT -p udp -s $HOST_IP -o $INET --dport 53 $ACCEPT
-$IPT -A INPUT  -p udp -d $HOST_IP -o $INET --sport 53 $LOG "[IPv4 Allow DNS IN] "
-$IPT -A INPUT  -p udp -d $HOST_IP -o $INET --sport 53 $ACCEPT
+$IPT -A INPUT  -p udp -d $HOST_IP -i $INET --sport 53 $LOG "[IPv4 Allow DNS IN] "
+$IPT -A INPUT  -p udp -d $HOST_IP -i $INET --sport 53 $ACCEPT
 
 # Allow NTP sync
 $IPT -A OUTPUT -p udp -s $HOST_IP -o $INET --dport 123 $LOG "[IPv4 Allow NTP OUT] "
 $IPT -A OUTPUT -p udp -s $HOST_IP -o $INET --dport 123 $ACCEPT
-$IPT -A INPUT  -p udp -d $HOST_IP -o $INET --sport 123 $LOG "[IPv4 Allow NTP IN] "
-$IPT -A INPUT  -p udp -d $HOST_IP -o $INET --sport 123 $ACCEPT
+$IPT -A INPUT  -p udp -d $HOST_IP -i $INET --sport 123 $LOG "[IPv4 Allow NTP IN] "
+$IPT -A INPUT  -p udp -d $HOST_IP -i $INET --sport 123 $ACCEPT
 
 # Allow FTP traffic (for package managers)
 $IPT -A OUTPUT -p tcp -s $HOST_IP -o $INET --dport 21 $LOG "[IPv4 Allow FTP OUT] "
 $IPT -A OUTPUT -p tcp -s $HOST_IP -o $INET --dport 21 $ACCEPT
-$IPT -A INPUT  -p tcp -d $HOST_IP -o $INET --sport 21 $LOG "[IPv4 Allow FTP IN] "
-$IPT -A INPUT  -p tcp -d $HOST_IP -o $INET --sport 21 $ACCEPT
+$IPT -A INPUT  -p tcp -d $HOST_IP -i $INET --sport 21 $LOG "[IPv4 Allow FTP IN] "
+$IPT -A INPUT  -p tcp -d $HOST_IP -i $INET --sport 21 $ACCEPT
 
 # Allow HTTP traffic
 $IPT -A OUTPUT -p tcp -s $HOST_IP -o $INET --dport 80 $LOG "[IPv4 Allow HTTP OUT] "
 $IPT -A OUTPUT -p tcp -s $HOST_IP -o $INET --dport 80 $ACCEPT
-$IPT -A INPUT  -p tcp -d $HOST_IP -o $INET --sport 80 $LOG "[IPv4 Allow HTTP IN] "
-$IPT -A INPUT  -p tcp -d $HOST_IP -o $INET --sport 80 $ACCEPT
+$IPT -A INPUT  -p tcp -d $HOST_IP -i $INET --sport 80 $LOG "[IPv4 Allow HTTP IN] "
+$IPT -A INPUT  -p tcp -d $HOST_IP -i $INET --sport 80 $ACCEPT
 
 # Allow HTTPS traffic
 $IPT -A OUTPUT -p tcp -s $HOST_IP -o $INET --dport 443 $LOG "[IPv4 Allow HTTPS OUT] "
 $IPT -A OUTPUT -p tcp -s $HOST_IP -o $INET --dport 443 $ACCEPT
-$IPT -A INPUT  -p tcp -d $HOST_IP -o $INET --sport 443 $LOG "[IPv4 Allow HTTPS IN] "
-$IPT -A INPUT  -p tcp -d $HOST_IP -o $INET --sport 443 $ACCEPT
+$IPT -A INPUT  -p tcp -d $HOST_IP -i $INET --sport 443 $LOG "[IPv4 Allow HTTPS IN] "
+$IPT -A INPUT  -p tcp -d $HOST_IP -i $INET --sport 443 $ACCEPT
 
 # ╔═══════════════════════════════════════════════════════════════════════════╗
 # ║ Default Deny Rules                                                        ║
