@@ -47,7 +47,7 @@ if [expr $sessions(num) < 2] {
 #set load(1)        [lindex $load(base) 0]
 #set load(5)        [lindex $load(base) 1]
 #set load(15)       [lindex $load(base) 2]
-#set cpu(base)      [exec -- lscpu | grep "Model name"]]
+#set cpu(base)      [exec -- lscpu | grep "Model name"]
 #set cpu(brand)     [lindex $cpu(base) 2]
 #set cpu(brand)     [exec -- sed -e "s/(R)//gi" << "$cpu(brand)"]
 #set cpu(series)    [lindex $cpu(base) 3]
@@ -95,12 +95,12 @@ set title(2)             [format "$bold$pink SSH Sessions $norm$grey... "]
 set title(3)             [format "$bold$pink Last Login $norm$grey..... "]
 set title(4)             [format "$bold$pink Disk Usage $norm$grey..... "]
 
-set title(cpu_specific)  "$bold$pink CPU Specifications $norm$grey"
-set title(5)             [format "$bold$pink Load $norm$grey........ "]
-set title(6)             [format "$bold$pink Model $norm$grey....... "]
-set title(7)             [format "$bold$pink Cores $norm$grey....... "]
-set title(8)             [format "$bold$pink Frequency $norm$grey... "]
-set title(e)             [format "$bold$pink Max Frequency $norm$grey"]
+#set title(cpu_specific)  "$bold$pink CPU Specifications $norm$grey"
+#set title(5)             [format "$bold$pink Load $norm$grey........ "]
+#set title(6)             [format "$bold$pink Model $norm$grey....... "]
+#set title(7)             [format "$bold$pink Cores $norm$grey....... "]
+#set title(8)             [format "$bold$pink Frequency $norm$grey... "]
+#set title(e)             [format "$bold$pink Max Frequency $norm$grey"]
 
 set title(memory)        "$bold$pink Memory Usage $norm$grey"
 set title(9)             [format "$bold$pink Used $norm$grey........ "]
@@ -114,11 +114,11 @@ set string(sessions)     "There $sessions(verb) currently $sessions(num) $sessio
 set string(login)        "$login(day) $login(date), $login(month) $login(year) at $login(time) from IP $login(ip)"
 set string(disk)         "$disk(used) MB used in $var(home)"
 
-set string(cpu_load)     "$load(1)%"
-set string(cpu_model)    "$cpu(brand) $cpu(series) $cpu(model)$cpu(version)"
-set string(cpu_cores)    "$cpu(nproc)"
-set string(cpu_freq)     "$cpu(freq) GHz"
-set string(cpu_maxfreq)  "$cpu(maxfreq) GHz"
+#set string(cpu_load)     "$load(1)%"
+#set string(cpu_model)    "$cpu(brand) $cpu(series) $cpu(model)$cpu(version)"
+#set string(cpu_cores)    "$cpu(nproc)"
+#set string(cpu_freq)     "$cpu(freq) GHz"
+#set string(cpu_maxfreq)  "$cpu(maxfreq) GHz"
 
 set string(mem_used)     "$mem(used) / $mem(total) MB"
 set string(mem_avail)    "$mem(avail) MB"
@@ -130,16 +130,16 @@ set content(1)           [format "%-73s" "$norm$string(uptime)$grey"]
 set content(2)           [format "%-73s" "$norm$string(sessions)$grey"]
 set content(3)           [format "%-73s" "$norm$string(login)$grey"]
 set content(4)           [format "%-73s" "$norm$string(disk)$grey"]
-set content(5)           [format "%-36s" "$norm$string(cpu_load)$grey"]
-set content(6)           [format "%-36s" "$norm$string(cpu_model)$grey"]
-set content(7)           [format "%-36s" "$norm$string(cpu_cores)$grey"]
-set content(8)           [format "%-36s" "$norm$string(cpu_freq)$grey"]
+#set content(5)           [format "%-36s" "$norm$string(cpu_load)$grey"]
+#set content(6)           [format "%-36s" "$norm$string(cpu_model)$grey"]
+#set content(7)           [format "%-36s" "$norm$string(cpu_cores)$grey"]
+#set content(8)           [format "%-36s" "$norm$string(cpu_freq)$grey"]
 set content(9)           [format "%-36s" "$norm$string(mem_used)$grey"]
 set content(a)           [format "%-36s" "$norm$string(mem_avail)$grey"]
 set content(b)           [format "%-36s" "$norm$string(mem_cache)$grey"]
 set content(c)           [format "%-36s" "$norm$string(mem_swap)$grey"]
 set content(d)           [format "%-36s" "$norm$string(mem_load)$grey"]
-set content(e)           [format "%-36s" "$norm$string(cpu_maxfreq)$grey"]
+#set content(e)           [format "%-36s" "$norm$string(cpu_maxfreq)$grey"]
 
 # Output to console
 puts "$grey                              ╔════════════════════╗"
