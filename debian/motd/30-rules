@@ -19,5 +19,5 @@ puts "$grey  ║$norm      perform any illegal activity.  Stay in your home dire
 puts "$grey  ║$norm                 the system clean and make regular backups.                 $grey║"
 puts "$grey  ║                                                                            ║"
 puts "$grey  ║$norm$bold            DO NOT KEEP SENSITIVE LOGS OR HISTORY ON THIS SERVER            $norm$grey║"
-puts "$grey  ╚════════════════════════════════════════════════════════════════════════════╝"
+puts "$grey  ╚════════════════════════════════════════════════════════════════════════════╝$norm"
 puts ""
