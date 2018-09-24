@@ -65,7 +65,8 @@ chmod 644 /home/$username/.ssh/authorized_keys
 # Setup SSHD configuration
 cp ./config/sshd_config /etc/ssh/sshd_config && \
 chown root:root /etc/ssh/sshd_config && \
-chmod 600 /etc/ssh/sshd_config
+chmod 600 /etc/ssh/sshd_config && \
+sed -i "s/DefaultUserToBeOverwritten/$username/" /etc/ssh/sshd_config
 
 # Install the SSH banner
 cp ./banner/issue.net /etc/issue.net && \
