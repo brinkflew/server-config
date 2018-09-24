@@ -143,6 +143,16 @@ chmod u+x ./bin/hardening/*.sh
 cd $location
 
 # ╔═══════════════════════════════════════════════════════════════════════════╗
+# ║ Enable private networking                                                 ║
+# ╚═══════════════════════════════════════════════════════════════════════════╝
+
+# Copy the interface details
+cat ./network/interfaces >> /etc/network/interfaces
+
+# Boot the interface up
+ifup ens7
+
+# ╔═══════════════════════════════════════════════════════════════════════════╗
 # ║ Deactivate root login to TTY                                              ║
 # ╚═══════════════════════════════════════════════════════════════════════════╝
 
