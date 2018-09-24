@@ -148,7 +148,7 @@ cd $location
 # ╚═══════════════════════════════════════════════════════════════════════════╝
 
 # Copy the interface details
-cat ./network/interfaces >> /etc/network/interfaces
+cat ./network/interfaces | tee -a /etc/network/interfaces
 
 # Boot the interface up
 ifup ens7
@@ -165,10 +165,10 @@ usermod -s /bin/false root
 # ╚═══════════════════════════════════════════════════════════════════════════╝
 
 # Install Nginx
-echo "deb http://nginx.org/packages/mainline/ubuntu/ stretch nginx" >> /etc/apt/sources.list
+echo "deb http://nginx.org/packages/mainline/ubuntu/ stretch nginx" | tee -a /etc/apt/sources.list
 mkdir -p /root/apt-keys
 cd /root/apt-keys
-wget http://nginx.org/keys/nginx_signing.key && \
+wget https://nginx.org/keys/nginx_signing.key && \
 apt-key add nginx_signing.key
 apt install -y nginx
 systemctl start nginx

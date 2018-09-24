@@ -147,7 +147,7 @@ cd $location
 # ╚═══════════════════════════════════════════════════════════════════════════╝
 
 # Copy the interface details
-cat ./network/interfaces >> /etc/network/interfaces
+cat ./network/interfaces | tee -a /etc/network/interfaces
 
 # Boot the interface up
 ifup ens7

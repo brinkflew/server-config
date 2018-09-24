@@ -31,7 +31,7 @@ STATE="-m state --state"
 HOST_IP="$(hostname -I)"
 INTERN_IP="10.0.0.0"
 DNS_IP="0.0.0.0"
-PROXY_IP="0.0.0.0"
+PROXY_IP="10.0.0.0/24"
 
 # Network cards configuration
 INET="eth0"
