@@ -58,7 +58,7 @@ PasswordAuthentication no
 PermitEmptyPasswords no
 
 PermitRootLogin no
-AllowUsers DefaultUserToBeOverwritten
+AllowUsers DefaultUserToBeOverriden
 
 LoginGraceTime 2m
 MaxAuthTries 4
@@ -139,5 +139,5 @@ X11UseLocalhost yes
 # ║ Per-User Configuration                                                    ║
 # ╚═══════════════════════════════════════════════════════════════════════════╝
 
-Match User brinkflew
+Match User DefaultUserToBeOverriden
   ChrootDirectory /

@@ -52,7 +52,6 @@ chage -d 0 $username
 mkdir /home/$username/.ssh
 mv /root/.ssh/authorized_keys /home/$username/.ssh/authorized_keys && \
 rm -Rf /root/.ssh && \
-chown $username:$username /home/$username && \
 chown $username:$username /home/$username/.ssh && \
 chown $username:$username /home/$username/.ssh/authorized_keys && \
 chmod 700 /home/$username/.ssh && \
@@ -66,7 +65,7 @@ chmod 644 /home/$username/.ssh/authorized_keys
 cp ./config/sshd_config /etc/ssh/sshd_config && \
 chown root:root /etc/ssh/sshd_config && \
 chmod 600 /etc/ssh/sshd_config && \
-sed -i "s/DefaultUserToBeOverwritten/$username/" /etc/ssh/sshd_config
+sed -i "s/DefaultUserToBeOverriden/$username/" /etc/ssh/sshd_config
 
 # Install the SSH banner
 cp ./banner/issue.net /etc/issue.net && \
