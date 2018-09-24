@@ -1,7 +1,21 @@
+# Enable the loopback interface
+auto lo
+iface lo inet loopback
 
-# Enable private networking
+# Enable public network
+allow-hotplug ens3
+iface ens3 inet dhcp
+
+# Enable Management network
 auto ens7
 iface ens7 inet static
-    address 10.0.0.1
-    netmask 255.255.255.0
-    mtu 1450
+  address 10.21.10.3
+  netmask 255.255.255.0
+  mtu 1450
+
+# Enable Internal network
+auto ens8
+iface ens8 inet static
+  address 10.21.20.3
+  netmask 255.255.255.0
+  mtu 1450

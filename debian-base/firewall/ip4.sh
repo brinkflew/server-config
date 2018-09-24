@@ -30,7 +30,7 @@ STATE="-m state --state"
 # IPs configuration
 HOST_IP="$(hostname -I)"
 DNS_IP="0.0.0.0"
-PROXY_IP="10.0.0.0/24"
+PROXY_IP="10.21.0.0"
 
 # Network cards configuration
 INET="ens3"

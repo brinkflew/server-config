@@ -58,6 +58,18 @@ chmod 700 /home/$username/.ssh && \
 chmod 644 /home/$username/.ssh/authorized_keys
 
 # ╔═══════════════════════════════════════════════════════════════════════════╗
+# ║ Enable private networking                                                 ║
+# ╚═══════════════════════════════════════════════════════════════════════════╝
+
+# Copy the interface details
+cat ./network/interfaces | tee -a /etc/network/interfaces
+
+# Boot the interface up
+ifup ens3
+ifup ens7
+ifup ens8
+
+# ╔═══════════════════════════════════════════════════════════════════════════╗
 # ║ Configure the SSH daemon                                                  ║
 # ╚═══════════════════════════════════════════════════════════════════════════╝
 
@@ -96,8 +108,8 @@ chown root:root /etc/update-motd.d/* && \
 chmod 700 /etc/update-motd.d/* && \
 chmod a+x /etc/update-motd.d/*
 
+# Ensure MOTD is displayed on first logon
 ln -s /run/motd.dynamic.new /run/motd.dynamic
-#cp /run/motd.dynamic.new /run/motd.dynamic
 
 # ╔═══════════════════════════════════════════════════════════════════════════╗
 # ║ Apply network security                                                    ║
@@ -127,6 +139,19 @@ mv /root/iptables/rules.v4 /etc/iptables/rules.v4
 mv /root/iptables/rules.v6 /etc/iptables/rules.v6
 
 # ╔═══════════════════════════════════════════════════════════════════════════╗
+# ║ Install and configure Nginx                                               ║
+# ╚═══════════════════════════════════════════════════════════════════════════╝
+
+# Install Nginx
+apt install -y apt-transport-https ca-certificates curl
+curl -fsSL https://nginx.org/keys/nginx_signing.key | apt-key add -
+add-apt-repository "deb http://nginx.org/packages/mainline/ubuntu/ stretch nginx"
+apt update
+apt install -y nginx
+systemctl start nginx
+systemctl enable nginx
+
+# ╔═══════════════════════════════════════════════════════════════════════════╗
 # ║ Apply system hardening                                                    ║
 # ╚═══════════════════════════════════════════════════════════════════════════╝
 
@@ -141,33 +166,9 @@ chmod u+x ./bin/hardening/*.sh
 ./bin/hardening.sh --apply
 cd ..
 
-
-# ╔═══════════════════════════════════════════════════════════════════════════╗
-# ║ Enable private networking                                                 ║
-# ╚═══════════════════════════════════════════════════════════════════════════╝
-
-# Copy the interface details
-cat ./network/interfaces | tee -a /etc/network/interfaces
-
-# Boot the interface up
-ifup ens7
-
 # ╔═══════════════════════════════════════════════════════════════════════════╗
 # ║ Deactivate root login to TTY                                              ║
 # ╚═══════════════════════════════════════════════════════════════════════════╝
 
 # Deactivate root login
 usermod -s /bin/false root
-
-# ╔═══════════════════════════════════════════════════════════════════════════╗
-# ║ Install and configure Nginx                                               ║
-# ╚═══════════════════════════════════════════════════════════════════════════╝
-
-# Install Nginx
-apt install -y apt-transport-https ca-certificates curl
-curl -fsSL https://nginx.org/keys/nginx_signing.key | apt-key add -
-add-apt-repository "deb http://nginx.org/packages/mainline/ubuntu/ stretch nginx"
-apt update
-apt install -y nginx
-systemctl start nginx
-systemctl enable nginx
