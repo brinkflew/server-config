@@ -142,6 +142,17 @@ chmod u+x ./bin/hardening/*.sh
 ./bin/hardening.sh --apply
 cd $location
 
+
+# ╔═══════════════════════════════════════════════════════════════════════════╗
+# ║ Enable private networking                                                 ║
+# ╚═══════════════════════════════════════════════════════════════════════════╝
+
+# Copy the interface details
+cat ./network/interfaces | tee -a /etc/network/interfaces
+
+# Boot the interface up
+ifup ens7
+
 # ╔═══════════════════════════════════════════════════════════════════════════╗
 # ║ Deactivate root login to TTY                                              ║
 # ╚═══════════════════════════════════════════════════════════════════════════╝
@@ -150,7 +161,36 @@ cd $location
 usermod -s /bin/false root
 
 # ╔═══════════════════════════════════════════════════════════════════════════╗
-# ║ Finally, reboot the system                                                ║
+# ║ Install and configure Docker                                              ║
 # ╚═══════════════════════════════════════════════════════════════════════════╝
 
-# shutdown -r now
+# Install Docker
+apt install -y apt-transport-https ca-certificates curl gnupg2 software-properties-common
+curl -fsSL https://download.docker.com/linux/$(. /etc/os-release; echo "$ID")/gpg | apt-key add -
+add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian stretch stable"
+apt update
+apt install -y docker-ce
+
+# ╔═══════════════════════════════════════════════════════════════════════════╗
+# ║ Install and configure Kubernetes                                          ║
+# ╚═══════════════════════════════════════════════════════════════════════════╝
+
+# Install Kubernetes
+curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+add-apt-repository "deb http://apt.kubernetes.io/ kubernetes-xenial main"
+apt update
+apt install -y kubelet kubeadm kubectl
+
+# Initialize kubeadm
+kubeadm init --pod-network-cidr=172.16.0.0/16
+
+# Add the kube config to the user home directory
+mkdir -p /home/$username/.kube
+cp -i /etc/kubernetes/admin.conf /home/$username/.kube/config
+chown $username:$username /home/$username/.kube/config
+
+# Install the flannel networking driver
+kubectl apply -f https://github.com/coreos/flannel/raw/master/Documentation/kube-flannel.yml
+
+# Install the Kubernetes dashboard
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml

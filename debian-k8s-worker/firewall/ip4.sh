@@ -29,11 +29,12 @@ STATE="-m state --state"
 
 # IPs configuration
 HOST_IP="$(hostname -I)"
+INTERN_IP="10.0.0.0"
 DNS_IP="0.0.0.0"
-PROXY_IP="0.0.0.0"
+PROXY_IP="10.0.0.0/24"
 
 # Network cards configuration
-INET="eth0"
+INET="ens3"
 
 # Flush all existing rules
 $IPT -F INPUT
@@ -70,8 +71,8 @@ $IPT -A OUTPUT $STATE ESTABLISHED,RELATED $ACCEPT
 # ╚═══════════════════════════════════════════════════════════════════════════╝
 
 # Allow SSH traffic
-$IPT -A OUTPUT -d $HOST_IP -p tcp --sport 9122 $LOG_WARN "[IPv4 Allow SSH OUT] "
-$IPT -A OUTPUT -d $HOST_IP -p tcp --sport 9122 $ACCEPT
+$IPT -A OUTPUT -s $HOST_IP -p tcp --dport 9122 $LOG_WARN "[IPv4 Allow SSH OUT] "
+$IPT -A OUTPUT -s $HOST_IP -p tcp --dport 9122 $ACCEPT
 $IPT -A INPUT  -d $HOST_IP -p tcp --dport 9122 $LOG_WARN "[IPv4 Allow SSH IN] "
 $IPT -A INPUT  -d $HOST_IP -p tcp --dport 9122 $ACCEPT
 
@@ -128,6 +129,38 @@ $IPT -A OUTPUT -p tcp -s $HOST_IP -o $INET --dport 443 $LOG "[IPv4 Allow HTTPS O
 $IPT -A OUTPUT -p tcp -s $HOST_IP -o $INET --dport 443 $ACCEPT
 $IPT -A INPUT  -p tcp -d $HOST_IP -i $INET --sport 443 $LOG "[IPv4 Allow HTTPS IN] "
 $IPT -A INPUT  -p tcp -d $HOST_IP -i $INET --sport 443 $ACCEPT
+
+# ╔═══════════════════════════════════════════════════════════════════════════╗
+# ║ Kubernetes Rules                                                          ║
+# ╚═══════════════════════════════════════════════════════════════════════════╝
+
+# Allow internal HTTPS traffic
+$IPT -A INPUT  -p tcp -s $INTERN_IP -i ens7 --dport 443 $LOG "[IPv4 Allow K8s HTTPS IN]"
+$IPT -A INPUT  -p tcp -s $INTERN_IP -i ens7 --dport 443 $ACCEPT
+$IPT -A OUTPUT -p tcp -d $INTERN_IP -o ens7 --dport 443 $LOG "[IPv4 Allow K8s HTTPS OUT]"
+$IPT -A OUTPUT -p tcp -d $INTERN_IP -o ens7 --dport 443 $ACCEPT
+
+# Allow ETCD Server Client API traffic
+$IPT -A INPUT  -p tcp -s $INTERN_IP -i ens7 --dport 2379-2380 $LOG "[IPv4 Allow K8s ETCD IN]"
+$IPT -A INPUT  -p tcp -s $INTERN_IP -i ens7 --dport 2379-2380 $ACCEPT
+$IPT -A OUTPUT -p tcp -d $INTERN_IP -o ens7 --dport 2379-2380 $LOG "[IPv4 Allow K8s ETCD OUT]"
+$IPT -A OUTPUT -p tcp -d $INTERN_IP -o ens7 --dport 2379-2380 $ACCEPT
+
+# Allow Masternode Healthcheck traffic
+$IPT -A INPUT  -p tcp -s $INTERN_IP -i ens7 --dport 10250 $LOG "[IPv4 Allow K8s Healthcheck IN]"
+$IPT -A INPUT  -p tcp -s $INTERN_IP -i ens7 --dport 10250 $ACCEPT
+$IPT -A OUTPUT -p tcp -d $INTERN_IP -o ens7 --dport 10250 $LOG "[IPv4 Allow K8s Healthcheck OUT]"
+$IPT -A OUTPUT -p tcp -d $INTERN_IP -o ens7 --dport 10250 $ACCEPT
+
+# Allow Flannel Overlay Network traffic
+$IPT -A INPUT  -p udp -s $INTERN_IP -i ens7 --dport 8285 $LOG "[IPv4 Allow K8s Flannel IN]"
+$IPT -A INPUT  -p udp -s $INTERN_IP -i ens7 --dport 8285 $ACCEPT
+$IPT -A OUTPUT -p udp -d $INTERN_IP -o ens7 --dport 8285 $LOG "[IPv4 Allow K8s Flannel OUT]"
+$IPT -A OUTPUT -p udp -d $INTERN_IP -o ens7 --dport 8285 $ACCEPT
+$IPT -A INPUT  -p udp -s $INTERN_IP -i ens7 --dport 8472 $LOG "[IPv4 Allow K8s Flannel IN]"
+$IPT -A INPUT  -p udp -s $INTERN_IP -i ens7 --dport 8472 $ACCEPT
+$IPT -A OUTPUT -p udp -d $INTERN_IP -o ens7 --dport 8472 $LOG "[IPv4 Allow K8s Flannel OUT]"
+$IPT -A OUTPUT -p udp -d $INTERN_IP -o ens7 --dport 8472 $ACCEPT
 
 # ╔═══════════════════════════════════════════════════════════════════════════╗
 # ║ Default Deny Rules                                                        ║

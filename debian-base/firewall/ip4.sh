@@ -33,7 +33,7 @@ DNS_IP="0.0.0.0"
 PROXY_IP="10.0.0.0/24"
 
 # Network cards configuration
-INET="eth0"
+INET="ens3"
 
 # Flush all existing rules
 $IPT -F INPUT
@@ -70,10 +70,10 @@ $IPT -A OUTPUT $STATE ESTABLISHED,RELATED $ACCEPT
 # ╚═══════════════════════════════════════════════════════════════════════════╝
 
 # Allow SSH traffic
-$IPT -A OUTPUT -d $HOST_IP -p tcp --dport 9122 $LOG_WARN "[IPv4 Allow SSH OUT] "
-$IPT -A OUTPUT -d $HOST_IP -p tcp --dport 9122 $ACCEPT
-$IPT -A INPUT  -d $HOST_IP -s $PROXY_IP -p tcp --dport 9122 $LOG_WARN "[IPv4 Allow SSH IN] "
-$IPT -A INPUT  -d $HOST_IP -s $PROXY_IP -p tcp --dport 9122 $ACCEPT
+$IPT -A OUTPUT -s $HOST_IP -p tcp --dport 9122 $LOG_WARN "[IPv4 Allow SSH OUT] "
+$IPT -A OUTPUT -s $HOST_IP -p tcp --dport 9122 $ACCEPT
+$IPT -A INPUT  -d $HOST_IP -p tcp --dport 9122 $LOG_WARN "[IPv4 Allow SSH IN] "
+$IPT -A INPUT  -d $HOST_IP -p tcp --dport 9122 $ACCEPT
 
 # ╔═══════════════════════════════════════════════════════════════════════════╗
 # ║ Monitoring Rules                                                          ║

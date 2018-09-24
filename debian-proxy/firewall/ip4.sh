@@ -34,7 +34,7 @@ DNS_IP="0.0.0.0"
 PROXY_IP="10.0.0.0/24"
 
 # Network cards configuration
-INET="eth0"
+INET="ens3"
 
 # Flush all existing rules
 $IPT -F INPUT

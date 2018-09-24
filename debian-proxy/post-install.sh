@@ -165,11 +165,10 @@ usermod -s /bin/false root
 # ╚═══════════════════════════════════════════════════════════════════════════╝
 
 # Install Nginx
-echo "deb http://nginx.org/packages/mainline/ubuntu/ stretch nginx" | tee -a /etc/apt/sources.list
-mkdir -p /root/apt-keys
-cd /root/apt-keys
-wget https://nginx.org/keys/nginx_signing.key && \
-apt-key add nginx_signing.key
+apt install -y apt-transport-https ca-certificates curl
+curl -fsSL https://nginx.org/keys/nginx_signing.key | apt-key add -
+add-apt-repository "deb http://nginx.org/packages/mainline/ubuntu/ stretch nginx"
+apt update
 apt install -y nginx
 systemctl start nginx
 systemctl enable nginx
