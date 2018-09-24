@@ -55,8 +55,8 @@ rm -Rf /root/.ssh && \
 chown $username:$username /home/$username && \
 chown $username:$username /home/$username/.ssh && \
 chown $username:$username /home/$username/.ssh/authorized_keys && \
-chmod 700 /home/$username/.ssh
-chmod 600 /home/$username/.ssh/authorized_keys
+chmod 700 /home/$username/.ssh && \
+chmod 644 /home/$username/.ssh/authorized_keys
 
 # ╔═══════════════════════════════════════════════════════════════════════════╗
 # ║ Configure the SSH daemon                                                  ║
