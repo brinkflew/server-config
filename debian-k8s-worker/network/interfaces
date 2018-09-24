@@ -1,0 +1,7 @@
+
+# Enable private networking
+auto ens7
+iface ens7 inet static
+    address 10.0.0.1
+    netmask 255.255.255.0
+    mtu 1450
