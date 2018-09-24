@@ -131,7 +131,6 @@ mv /root/iptables/rules.v6 /etc/iptables/rules.v6
 # ╚═══════════════════════════════════════════════════════════════════════════╝
 
 # Check system hardening and apply modifications if needed
-location=${pwd}
 cd cis/
 mkdir -p /etc/default
 sed -i "s/disabled/enabled/" ./etc/conf.d/*
@@ -140,7 +139,7 @@ sed -i "s#CIS_ROOT_DIR=.*#CIS_ROOT_DIR='$(pwd)'#" /etc/default/cis-hardening
 chmod u+x ./bin/hardening.sh
 chmod u+x ./bin/hardening/*.sh
 ./bin/hardening.sh --apply
-cd $location
+cd ..
 
 # ╔═══════════════════════════════════════════════════════════════════════════╗
 # ║ Enable private networking                                                 ║
