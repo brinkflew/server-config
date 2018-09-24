@@ -1,0 +1,143 @@
+# ╔═══════════════════════════════════════════════════════════════════════════╗
+# ║                Debian 9.4 Stretch SSH Secure Configuration                ║
+# ╠═══════════════════════════════════════════════════════════════════════════╣
+# ║ Version: ... 0.0.0                                                        ║
+# ║ Author: .... Antoine Van Serveyt <avanserv@brinkflew.com>                 ║
+# ║ Created: ... Mon 18th, June 2018 at 10:15 by Antoine Van Serveyt          ║
+# ║ License: ... MIT License                                                  ║
+# ║                                                                           ║
+# ║ Updated: ...                                                              ║
+# ╠═══════════════════════════════════════════════════════════════════════════╣
+# ║ This is the sshd server system-wide configuration file. See               ║
+# ║ sshd_config(5)for more information.                                       ║
+# ║                                                                           ║
+# ║ The strategy used for options in the default sshd_config shipped with     ║
+# ║ OpenSSH is to specify options with their default value where possible,    ║
+# ║ but leave them commented.  Uncommented options override the default value ║
+# ╚═══════════════════════════════════════════════════════════════════════════╝
+
+# ╔═══════════════════════════════════════════════════════════════════════════╗
+# ║ Networking                                                                ║
+# ╚═══════════════════════════════════════════════════════════════════════════╝
+
+Port 9122
+AddressFamily inet
+#ListenAddress 0.0.0.0
+
+# ╔═══════════════════════════════════════════════════════════════════════════╗
+# ║ Ciphers & Keying                                                          ║
+# ╚═══════════════════════════════════════════════════════════════════════════╝
+
+HostKey /etc/ssh/ssh_host_rsa_key
+HostKey /etc/ssh/ssh_host_ed25519_key
+HostKey /etc/ssh/ssh_host_ecdsa_key
+
+RekeyLimit default none
+
+Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr
+KexAlgorithms curve25519-sha256@libssh.org,ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256
+MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,umac-128@openssh.com
+
+# ╔═══════════════════════════════════════════════════════════════════════════╗
+# ║ Logging                                                                   ║
+# ╚═══════════════════════════════════════════════════════════════════════════╝
+
+SyslogFacility AUTH
+LogLevel VERBOSE
+
+# ╔═══════════════════════════════════════════════════════════════════════════╗
+# ║ Authentication                                                            ║
+# ╚═══════════════════════════════════════════════════════════════════════════╝
+
+StrictModes yes
+Protocol 2
+
+AuthenticationMethods publickey
+PubkeyAuthentication yes
+PasswordAuthentication no
+PermitEmptyPasswords no
+
+PermitRootLogin no
+AllowUsers DefaultUserToBeOverriden
+
+LoginGraceTime 2m
+MaxAuthTries 4
+MaxSessions 5
+
+AuthorizedKeysFile .ssh/authorized_keys
+AuthorizedPrincipalsFile none
+AuthorizedKeysCommand none
+AuthorizedKeysCommandUser nobody
+
+ClientAliveInterval 60
+ClientAliveCountMax 10
+TCPKeepAlive yes
+
+HostbasedAuthentication no
+IgnoreUserKnownHosts no
+IgnoreRhosts yes
+
+ChallengeResponseAuthentication no
+
+# Kerberos options
+KerberosAuthentication no
+KerberosOrLocalPasswd no
+KerberosTicketCleanup no
+KerberosGetAFSToken no
+
+# GSSAPI options
+GSSAPIAuthentication no
+GSSAPICleanupCredentials no
+GSSAPIStrictAcceptorCheck no
+GSSAPIKeyExchange no
+
+# Set this to 'yes' to enable PAM authentication, account processing,
+# and session processing. If this is enabled, PAM authentication will
+# be allowed through the ChallengeResponseAuthentication and
+# PasswordAuthentication.  Depending on your PAM configuration,
+# PAM authentication via ChallengeResponseAuthentication may bypass
+# the setting of "PermitRootLogin without-password".
+
+# If you just want the PAM account and session checks to run without
+# PAM authentication, then enable this but set PasswordAuthentication
+# and ChallengeResponseAuthentication to 'no'.
+UsePAM yes
+
+# ╔═══════════════════════════════════════════════════════════════════════════╗
+# ║ Miscellaneous                                                             ║
+# ╚═══════════════════════════════════════════════════════════════════════════╝
+
+Banner /etc/issue.net
+AcceptEnv LANG LC_*
+Subsystem sftp  /usr/lib/ssh/sftp-server -f AUTHPRIV -l INFO
+
+AllowAgentForwarding no
+AllowTcpForwarding no
+GatewayPorts no
+
+PermitTTY yes
+PrintMotd no
+PrintLastLog no
+
+UseLogin no
+UsePrivilegeSeparation sandbox
+PermitUserEnvironment no
+Compression delayed
+UseDNS no
+PidFile /var/run/sshd.pid
+MaxStartups 10:30:100
+PermitTunnel no
+ChrootDirectory %h
+VersionAddendum none
+
+# X11 options
+X11Forwarding no
+X11DisplayOffset 10
+X11UseLocalhost yes
+
+# ╔═══════════════════════════════════════════════════════════════════════════╗
+# ║ Per-User Configuration                                                    ║
+# ╚═══════════════════════════════════════════════════════════════════════════╝
+
+Match User DefaultUserToBeOverriden
+  ChrootDirectory /
