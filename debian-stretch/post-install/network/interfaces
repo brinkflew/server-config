@@ -1,0 +1,21 @@
+# Enable the loopback interface
+auto lo
+iface lo inet loopback
+
+# Enable public network
+allow-hotplug ${public_inet}
+iface ${public_inet} inet dhcp
+
+# Enable Management network
+auto ${mgmt_inet}
+iface ${mgmt_inet} inet static
+  address ${mgmt_ip}
+  netmask ${mgmt_mask}
+  mtu 1450
+
+# Enable Internal network
+auto ${priv_inet}
+iface ${priv_inet} inet static
+  address ${priv_ip}
+  netmask ${priv_mask}
+  mtu 1450

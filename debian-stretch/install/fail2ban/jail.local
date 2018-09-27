@@ -1,0 +1,7 @@
+[DEFAULT]
+bantime = 864000
+findtime = 600
+maxretry = 3
+[sshd]
+enabled = true
+bantime = 864000

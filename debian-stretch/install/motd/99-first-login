@@ -1,0 +1,25 @@
+#!/usr/bin/env tclsh
+
+# Shell colors
+set norm  "\033\[0m"
+set grey  "\033\[38;5;238m"
+set white "\033\[38;5;255m"
+set pink  "\033\[38;5;162m"
+set bold  "\033\[1m"
+
+# Title
+set first_login__ "$bold$pink First Login? $norm$grey"
+
+puts "$grey                                 ╔══════════════╗"
+puts "$grey  ╔══════════════════════════════╣$first_login__╠══════════════════════════════╗"
+puts "$grey  ║                              ╚══════════════╝                              ║"
+puts "$grey  ║$norm  Please go to your home directory and run the post installation  $grey║"
+puts "$grey  ║$norm            script with the following required inputs:            $grey║"
+puts "$grey  ║$norm   - The MAC address of the interface in the MANAGEMENT network   $grey║"
+puts "$grey  ║$norm                - The IP address of that interface                $grey║"
+puts "$grey  ║$norm                 - The IP mask for that interface                 $grey║"
+puts "$grey  ║$norm    - The MAC address of the interface in the INTERNAL network    $grey║"
+puts "$grey  ║$norm                - The IP address of that interface                $grey║"
+puts "$grey  ║$norm                 - The IP mask for that interface                 $grey║"
+puts "$grey  ╚════════════════════════════════════════════════════════════════════════════╝$norm"
+puts ""
