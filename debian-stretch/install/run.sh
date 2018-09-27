@@ -25,14 +25,14 @@ while getopts u:p:c:m:i:e: option; do
     p) userpass=${OPTARG};;
     c) case "$OPTARG"
        in
-         "pink") usercolor="\033\[38;5;162m";;
-         "blue") usercolor="\033\[38;5;032m";;
-         "green") usercolor="\033\[38;5;034m";;
-         "yellow") usercolor="\033\[38;5;184m";;
-         "orange") usercolor="\033\[38;5;214m";;
-         "red") usercolor="\033\[38;5;196m";;
-         "violet") usercolor="\033\[38;5;134m";;
-         "white") usercolor="\033\[38;5;255m";;
+         "pink") usercolor="\e\[38;5;162m";;
+         "blue") usercolor="\e\[38;5;032m";;
+         "green") usercolor="\e\[38;5;034m";;
+         "yellow") usercolor="\e\[38;5;184m";;
+         "orange") usercolor="\e\[38;5;214m";;
+         "red") usercolor="\e\[38;5;196m";;
+         "violet") usercolor="\e\[38;5;134m";;
+         "white") usercolor="\e\[38;5;255m";;
        esac;;
   esac
 done
