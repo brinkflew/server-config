@@ -69,36 +69,36 @@ $IPT -A OUTPUT -o lo $ACCEPT
 # response to a previously sent SYN packet. The SYNACK packet itself is
 # considered to be part of the established connection, so no special
 # rule is needed to allow the SYNACK packet itself.
-$IPT -A INPUT -i $INT_IP $STATE ESTABLISHED,RELATED $ACCEPT
-$IPT -A INPUT -i $MGT_IP $STATE ESTABLISHED,RELATED $ACCEPT
+$IPT -A INPUT  $STATE ESTABLISHED,RELATED $ACCEPT
+$IPT -A OUTPUT $STATE ESTABLISHED,RELATED $ACCEPT
 
 # ╔═══════════════════════════════════════════════════════════════════════════╗
 # ║ Management Rules                                                          ║
 # ╚═══════════════════════════════════════════════════════════════════════════╝
 
 # Allow SSH inbound connections from proxy server
-$IPT -A INPUT -s $PRX_IP -d $INT_IP -p tcp --dport 9122 $LOG_WARN "[Allow SSH IN]"
-$IPT -A INPUT -s $PRX_IP -d $INT_IP -p tcp --dport 9122 $ACCEPT
+$IPT -A INPUT -i $MGT_INET -s $PRX_IP -d $MGT_IP -p tcp --dport 9122 $LOG_WARN "[Allow SSH IN]"
+$IPT -A INPUT -i $MGT_INET -s $PRX_IP -d $MGT_IP -p tcp --dport 9122 $ACCEPT
 
 # ╔═══════════════════════════════════════════════════════════════════════════╗
 # ║ Monitoring Rules                                                          ║
 # ╚═══════════════════════════════════════════════════════════════════════════╝
 
 # ICMP: Allow being pinged
-$IPT -A INPUT  -p icmp -d $HOST_IP --icmp-type  8/0 $LOG "[Allow ICMP IN] "
-$IPT -A INPUT  -p icmp -d $HOST_IP --icmp-type  8/0 $ACCEPT
+$IPT -A INPUT  -p icmp --icmp-type  8/0 $LOG "[Allow ICMP IN] "
+$IPT -A INPUT  -p icmp --icmp-type  8/0 $ACCEPT
 
 # ICMP: Allow pinging
-$IPT -A OUTPUT -p icmp -s $HOST_IP --icmp-type  8/0 $LOG "[Allow ICMP OUT] "
-$IPT -A OUTPUT -p icmp -s $HOST_IP --icmp-type  8/0 $ACCEPT
+$IPT -A OUTPUT -p icmp --icmp-type  8/0 $LOG "[Allow ICMP OUT] "
+$IPT -A OUTPUT -p icmp --icmp-type  8/0 $ACCEPT
 
 # ICMP: Allow receiving ping timeouts
-$IPT -A INPUT  -p icmp -d $HOST_IP --icmp-type 11/0 $LOG "[Allow ICMP Timeout IN] "
-$IPT -A INPUT  -p icmp -d $HOST_IP --icmp-type 11/0 $ACCEPT
+$IPT -A INPUT  -p icmp --icmp-type 11/0 $LOG "[Allow ICMP Timeout IN] "
+$IPT -A INPUT  -p icmp --icmp-type 11/0 $ACCEPT
 
 # ICMP: Allow sending ping timeouts
-$IPT -A OUTPUT -p icmp -s $HOST_IP --icmp-type 11/0 $LOG "[Allow ICMP Timeout OUT] "
-$IPT -A OUTPUT -p icmp -s $HOST_IP --icmp-type 11/0 $ACCEPT
+$IPT -A OUTPUT -p icmp --icmp-type 11/0 $LOG "[Allow ICMP Timeout OUT] "
+$IPT -A OUTPUT -p icmp --icmp-type 11/0 $ACCEPT
 
 # ╔═══════════════════════════════════════════════════════════════════════════╗
 # ║ Kubernetes rules                                                          ║

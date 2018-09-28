@@ -209,6 +209,50 @@ if [ "$behind_proxy" == "no" ]; then
   echo -e $bold">$norm$pink Starting the Nginx service"$norm
   systemctl start nginx
   systemctl enable nginx
+else
+
+  echo -e $bold
+  echo -e "╔═══════════════════════════════════════════════════════════════════════════╝"
+  echo -e "  Are we setting up Kubernetes?"
+  echo -e "╔═══════════════════════════════════════════════════════════════════════════╝"
+  echo -e $norm
+
+  echo -e $pink"Is this server member of a Kubernetes cluster? (yes/no):"$norm
+  read k8s_member
+
+  if [ "$k8k8s_member" == "yes" ]; then
+
+    echo -e $bold
+    echo -e "╔═══════════════════════════════════════════════════════════════════════════╝"
+    echo -e "  Installing Kubernetes"
+    echo -e "╔═══════════════════════════════════════════════════════════════════════════╝"
+    echo -e $norm
+
+    # Install Docker
+    echo -e $bold">$norm$pink Installing Docker"$norm
+    apt install -y apt-transport-https ca-certificates curl gnupg2 software-properties-common
+    curl -fsSL https://download.docker.com/linux/$(. /etc/os-release; echo "$ID")/gpg | apt-key add -
+    add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian stretch stable"
+    apt update
+    apt install -y docker-ce
+
+    echo -e $bold">$norm$pink Installing Kubernetes"$norm
+    curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+    add-apt-repository "deb http://apt.kubernetes.io/ kubernetes-xenial main"
+    apt update
+    apt install -y kubelet kubeadm kubectl
+
+    echo -e $pink"Is this server a master or a worker node? (master/worker)"$norm
+    read k8s_type
+
+    if [ "$k8s_type" == "master" ]; then
+
+      # Initialize kubeadm
+      echo -e $bold">$norm$pink Initializing Kubeadm"$norm
+      kubeadm init --pod-network-cidr=172.16.0.0/16
+
+    fi
+  fi
 fi
 
 # Restart Fail2ban
@@ -226,6 +270,7 @@ echo -e "╔══════════════════════�
 echo -e $norm
 
 # Deactivate root login
+echo -e $bold">$norm$pink Setting root terminal to /bin/false"$norm
 usermod -s /bin/false root
 
 # ╔═══════════════════════════════════════════════════════════════════════════╗
@@ -234,7 +279,7 @@ usermod -s /bin/false root
 
 echo -e $bold
 echo -e "╔═══════════════════════════════════════════════════════════════════════════╝"
-echo -e "  Done, enjoy your new system!"
+echo -e "  All done, enjoy your new system!"
 echo -e "╔═══════════════════════════════════════════════════════════════════════════╝"
 echo -e $norm
 
