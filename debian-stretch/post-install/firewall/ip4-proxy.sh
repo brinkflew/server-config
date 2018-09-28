@@ -68,9 +68,8 @@ $IPT -A OUTPUT -o lo $ACCEPT
 # response to a previously sent SYN packet. The SYNACK packet itself is
 # considered to be part of the established connection, so no special
 # rule is needed to allow the SYNACK packet itself.
-$IPT -A INPUT -i $EXT_INET $STATE ESTABLISHED,RELATED $ACCEPT
-$IPT -A INPUT -i $INT_INET $STATE ESTABLISHED,RELATED $ACCEPT
-$IPT -A INPUT -i $MGT_INET $STATE ESTABLISHED,RELATED $ACCEPT
+$IPT -A INPUT  $STATE ESTABLISHED,RELATED $ACCEPT
+$IPT -A OUTPUT $STATE ESTABLISHED,RELATED $ACCEPT
 
 # ╔═══════════════════════════════════════════════════════════════════════════╗
 # ║ Management Rules                                                          ║
