@@ -80,13 +80,13 @@ echo -e "╔══════════════════════�
 echo -e $norm
 
 # Find the management and internal interfaces
-echo -e $bold">$bold$pink Finding the management network interface"$norm
+echo -e $bold">$norm$pink Finding the management network interface"$norm
 inet_mgt=$(ip -o -4 link show | grep "$mac_mgt" | awk '{print $2}' | cut -d: -f1)
-echo -e $bold">$bold$pink Finding the internal network interface"$norm
+echo -e $bold">$norm$pink Finding the internal network interface"$norm
 inet_int=$(ip -o -4 link show | grep "$mac_int" | awk '{print $2}' | cut -d: -f1)
 
 # Replace network values in the interfaces file
-echo -e $bold">$bold$pink Building the interfaces file"$norm
+echo -e $bold">$norm$pink Building the interfaces file"$norm
 sed -i "s/\${public_inet}/ens3/" ./network/interfaces
 sed -i "s/\${mgmt_inet}/$inet_mgt/" ./network/interfaces
 sed -i "s/\${mgmt_ip}/$ip_mgt/" ./network/interfaces
@@ -96,11 +96,11 @@ sed -i "s/\${priv_ip}/$ip_int/" ./network/interfaces
 sed -i "s/\${priv_mask}/$mask_int/" ./network/interfaces
 
 # Copy the interface details
-echo -e $bold">$bold$pink Copying the interfaces file to /etc/network/interfaces"$norm
+echo -e $bold">$norm$pink Copying the interfaces file to /etc/network/interfaces"$norm
 cat ./network/interfaces | tee /etc/network/interfaces
 
 # Boot the interfaces up
-echo -e $bold">$bold$pink Booting the network interfaces up"$norm
+echo -e $bold">$norm$pink Booting the network interfaces up"$norm
 ifup ens3
 ifup $inet_mgt
 ifup $inet_int
@@ -120,7 +120,7 @@ echo -e "╔══════════════════════�
 echo -e $norm
 
 # Remove the first-login script
-echo -e $bold">$bold$pink Removing the first-login script from /etc/update-motd.d/"$norm
+echo -e $bold">$norm$pink Removing the first-login script from /etc/update-motd.d/"$norm
 rm -f /etc/update-motd.d/99-first-login && \
 rm -f /var/run/motd.dynamic
 
@@ -135,15 +135,15 @@ echo -e "╔══════════════════════�
 echo -e $norm
 
 # Temporarily stop Fail2Ban
-echo -e $bold">$bold$pink Temporarily stopping fail2ban.service"$norm
+echo -e $bold">$norm$pink Temporarily stopping fail2ban.service"$norm
 systemctl stop fail2ban
 
 # Find the external IP address
-echo -e $bold">$bold$pink Finding the external IP address"$norm
+echo -e $bold">$norm$pink Finding the external IP address"$norm
 ip_ext=$(ip -o -4 addr list ens3 | grep "inet " | awk '{print $4}' | cut -d/ -f1)
 
 # Replace ip values in the iptables file
-echo -e $bold">$bold$pink Building the iptables files"$norm
+echo -e $bold">$norm$pink Building the iptables files"$norm
 sed -i "s/\${external_ip}/$ip_ext/" ./firewall/ip4*.sh
 sed -i "s/\${internal_ip}/$ip_int/" ./firewall/ip4*.sh
 sed -i "s/\${management_ip}/$ip_mgt/" ./firewall/ip4*.sh
@@ -157,23 +157,25 @@ sed -i "s/\${internal_inet}/$inet_int\/24/" ./firewall/ip4*.sh
 sed -i "s/\${management_inet}/$inet_mgt\/24/" ./firewall/ip4*.sh
 
 # Setup firewall rules (iptables)
-echo -e $bold">$bold$pink Copying the iptables scripts to /root/iptables"$norm
+echo -e $bold">$norm$pink Copying the iptables scripts to /root/iptables"$norm
 mkdir /root/iptables && cp ./firewall/*.sh /root/iptables/
 chown root:root /root/iptables
 chown root:root /root/iptables/*
 chmod 700 /root/iptables
 chmod 600 /root/iptables/*
 
-echo -e $bold">$bold$pink Applying iptables rules"$norm
-if [ "$behind_proxy" == "yes" ]; then
+echo -e $bold">$norm$pink Applying iptables rules"$norm
+if [ "$behind_proxy" == "no" ]; then
+  echo -e $bold">$norm$pink Reading iptables file /root/iptables/ip4-proxy.sh"$norm
   bash /root/iptables/ip4-proxy.sh
 else
+  echo -e $bold">$norm$pink Reading iptables file /root/iptables/ip4.sh"$norm
   bash /root/iptables/ip4.sh
 fi
 bash /root/iptables/ip6.sh
 
 # Install iptables-persistent
-echo -e $bold">$bold$pink Making iptables rules persistent"$norm
+echo -e $bold">$norm$pink Making iptables rules persistent"$norm
 apt install -y iptables-persistent
 echo -e iptables-persistent iptables-persistent/autosave_v4 boolean true | sudo debconf-set-selections
 echo -e iptables-persistent iptables-persistent/autosave_v6 boolean true | sudo debconf-set-selections
@@ -197,20 +199,20 @@ if [ "$behind_proxy" == "no" ]; then
   echo -e $norm
 
   # Install Nginx
-  echo -e $bold">$bold$pink Installing required packages"$norm
+  echo -e $bold">$norm$pink Installing required packages"$norm
   apt install -y apt-transport-https ca-certificates curl
   curl -fsSL https://nginx.org/keys/nginx_signing.key | apt-key add -
   add-apt-repository "deb http://nginx.org/packages/mainline/ubuntu/ stretch nginx"
   apt update
   apt install -y nginx
 
-  echo -e $bold">$bold$pink Starting the Nginx service"$norm
+  echo -e $bold">$norm$pink Starting the Nginx service"$norm
   systemctl start nginx
   systemctl enable nginx
 fi
 
 # Restart Fail2ban
-echo -e $bold">$bold$pink Restarting fail2ban.service"$norm
+echo -e $bold">$norm$pink Restarting fail2ban.service"$norm
 systemctl start faiL2ban
 
 # ╔═══════════════════════════════════════════════════════════════════════════╗

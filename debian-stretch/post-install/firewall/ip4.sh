@@ -31,7 +31,6 @@ EXT_IP="${external_ip}}"
 INT_IP="${internal_ip}"
 MGT_IP="${management_ip}"
 PRX_IP="${proxy_ip}"
-DNS_IPS="${dns_ips}"
 
 # Networks CIDR
 EXT_CIDR="${external_cidr}"

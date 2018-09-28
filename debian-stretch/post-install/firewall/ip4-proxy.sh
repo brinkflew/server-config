@@ -30,7 +30,6 @@ STATE="-m state --state"
 EXT_IP="${external_ip}"
 INT_IP="${internal_ip}"
 MGT_IP="${management_ip}"
-DNS_IPS="${dsn_ips}"
 
 # Networks CIDR
 EXT_CIDR="${external_cidr}"
@@ -77,8 +76,8 @@ $IPT -A INPUT -i $MGT_IP $STATE ESTABLISHED,RELATED $ACCEPT
 # ╚═══════════════════════════════════════════════════════════════════════════╝
 
 # Allow SSH inbound connections from external networks
-$IPT -A INPUT  -i $EXT_INET -d $INT_IP   -p tcp --dport 9122 $STATE NEW,ESTABLISHED $LOG_WARN "[Allow SSH IN] "
-$IPT -A INPUT  -i $EXT_INET -d $INT_IP   -p tcp --dport 9122 $STATE NEW,ESTABLISHED $ACCEPT
+$IPT -A INPUT  -i $EXT_INET -d $EXT_IP   -p tcp --dport 9122 $STATE NEW,ESTABLISHED $LOG_WARN "[Allow SSH IN] "
+$IPT -A INPUT  -i $EXT_INET -d $EXT_IP   -p tcp --dport 9122 $STATE NEW,ESTABLISHED $ACCEPT
 
 # Allow SSH outbound connections to management network
 $IPT -A OUTPUT -o $MGT_INET -d $MGT_CIDR -p tcp --dport 9122 $STATE NEW,ESTABLISHED $LOG_WARN "[Allow SSH OUT] "
