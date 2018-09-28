@@ -152,9 +152,9 @@ sed -i "s/\${dns_ips}//" ./firewall/ip4*.sh
 sed -i "s/\${external_cidr}//" ./firewall/ip4*.sh
 sed -i "s/\${internal_cidr}/$ip_int\/24/" ./firewall/ip4*.sh
 sed -i "s/\${management_cidr}/$ip_mgt\/24/" ./firewall/ip4*.sh
-sed -i "s/\${external_inet}/ens3\/24/" ./firewall/ip4*.sh
-sed -i "s/\${internal_inet}/$inet_int\/24/" ./firewall/ip4*.sh
-sed -i "s/\${management_inet}/$inet_mgt\/24/" ./firewall/ip4*.sh
+sed -i "s/\${external_inet}/ens3/" ./firewall/ip4*.sh
+sed -i "s/\${internal_inet}/$inet_int/" ./firewall/ip4*.sh
+sed -i "s/\${management_inet}/$inet_mgt/" ./firewall/ip4*.sh
 
 # Setup firewall rules (iptables)
 echo -e $bold">$norm$pink Copying the iptables scripts to /root/iptables"$norm
