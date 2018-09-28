@@ -13,11 +13,11 @@
 # ╚═══════════════════════════════════════════════════════════════════════════╝
 
 # Shell colors
-norm="\e\[0m"
-bold="\e\[1m"
-grey="\e\[38;5;238m"
-pink="\e\[38;5;162m"
-white="\e\[38;5;255m"
+norm="\e[0m"
+bold="\e[1m"
+grey="\e[38;5;238m"
+pink="\e[38;5;162m"
+white="\e[38;5;255m"
 
 # Default values for variables
 ip_int=""
@@ -81,9 +81,9 @@ echo -e $norm
 
 # Find the management and internal interfaces
 echo -e $bold$white">$pink Finding the management network interface"$norm
-inet_mgt=$(ip -o -4 link show | grep "$mac_mgt" | awk '{print $4}' | cut -d/ -f1)
+inet_mgt=$(ip -o -4 link show | grep "$mac_mgt" | awk '{print $2}' | cut -d: -f1)
 echo -e $bold$white">$pink Finding the internal network interface"$norm
-inet_int=$(ip -o -4 link show | grep "$mac_int" | awk '{print $4}' | cut -d/ -f1)
+inet_int=$(ip -o -4 link show | grep "$mac_int" | awk '{print $2}' | cut -d: -f1)
 
 # Replace network values in the interfaces file
 echo -e $bold$white">$pink Building the interfaces file"$norm
@@ -97,7 +97,7 @@ sed -i "s/\${priv_mask}/$mask_int/" ./network/interfaces
 
 # Copy the interface details
 echo -e $bold$white">$pink Copying the interfaces file to /etc/network/interfaces"$norm
-cat ./network/interfaces | tee -a /etc/network/interfaces
+cat ./network/interfaces | tee /etc/network/interfaces
 
 # Boot the interfaces up
 echo -e $bold$white">$pink Booting the network interfaces up"$norm
