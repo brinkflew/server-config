@@ -106,8 +106,12 @@ ifup $inet_mgt
 ifup $inet_int
 
 # Setup IP routes
-echo -e $bold">$norm$pink Creating new default route"$norm
-
+if [ "$behind_proxy" == "yes" ]; then
+ echo -e $bold">$norm$pink Creating new default route"$norm
+ ip route del default
+ ip route add default via $proxy_ip dev $inet_int
+ ifdown ens3
+fi
 
 if [ "$routing" == "yes" ]; then
   echo 1 > /proc/sys/net/ipv4/ip_forward
