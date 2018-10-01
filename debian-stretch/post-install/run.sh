@@ -106,21 +106,8 @@ ifup $inet_mgt
 ifup $inet_int
 
 # Setup IP routes
-echo -e $bold">$norm$pink Creating new routing tables"$norm
-echo 200 internal >> /etc/iproute2/rt_tables
-echo 201 management >> /etc/iproute2/rt_tables
+echo -e $bold">$norm$pink Creating new default route"$norm
 
-echo -e $bold">$norm$pink Adding a gateway to routing tables"$norm
-ip route add 10.21.10.0/24 dev $inet_mgt src $ip_mgt table management
-ip route add 10.21.20.0/24 dev $inet_int src $ip_int table internal
-
-echo -e $bold">$norm$pink Adding a default route"$norm
-ip route add default via 10.21.10.4 table management
-ip route add default via 10.21.20.4 table internal
-
-echo -e $bold">$norm$pink Adding a default route"$norm
-ip rule add from $mgt_ip table management
-ip rule add from $int_ip table internal
 
 if [ "$routing" == "yes" ]; then
   echo -e 1 > /proc/sys/net/ipv4/ip_forward

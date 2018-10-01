@@ -77,8 +77,8 @@ $IPT -A OUTPUT $STATE ESTABLISHED,RELATED $ACCEPT
 # ╚═══════════════════════════════════════════════════════════════════════════╝
 
 # Allow SSH inbound connections from proxy server
-$IPT -A INPUT -i $MGT_INET -s $PRX_IP -d $MGT_IP -p tcp --dport 9122 $LOG_WARN "[Allow SSH IN]"
-$IPT -A INPUT -i $MGT_INET -s $PRX_IP -d $MGT_IP -p tcp --dport 9122 $ACCEPT
+$IPT -A INPUT -i $MGT_INET -s $PRX_IP -p tcp --dport 9122 $STATE NEW,ESTABLISHED $LOG_WARN "[Allow SSH IN]"
+$IPT -A INPUT -i $MGT_INET -s $PRX_IP -p tcp --dport 9122 $STATE NEW,ESTABLISHED $ACCEPT
 
 # ╔═══════════════════════════════════════════════════════════════════════════╗
 # ║ Monitoring Rules                                                          ║
