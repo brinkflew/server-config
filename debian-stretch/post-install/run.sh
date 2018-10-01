@@ -110,7 +110,7 @@ echo -e $bold">$norm$pink Creating new default route"$norm
 
 
 if [ "$routing" == "yes" ]; then
-  echo -e 1 > /proc/sys/net/ipv4/ip_forward
+  echo 1 > /proc/sys/net/ipv4/ip_forward
 fi
 
 # ╔═══════════════════════════════════════════════════════════════════════════╗

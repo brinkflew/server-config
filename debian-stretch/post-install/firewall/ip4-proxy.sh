@@ -72,6 +72,13 @@ $IPT -A INPUT  $STATE ESTABLISHED,RELATED $ACCEPT
 $IPT -A OUTPUT $STATE ESTABLISHED,RELATED $ACCEPT
 
 # ╔═══════════════════════════════════════════════════════════════════════════╗
+# ║ Routing and Proxying                                                      ║
+# ╚═══════════════════════════════════════════════════════════════════════════╝
+
+# Active Network Address Translation between internal and external networks
+$IPT -t nat -A POSTROUTING -o $EXT_INET -j MASQUERADE
+
+# ╔═══════════════════════════════════════════════════════════════════════════╗
 # ║ Management Rules                                                          ║
 # ╚═══════════════════════════════════════════════════════════════════════════╝
 
